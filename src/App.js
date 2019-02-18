@@ -15,8 +15,13 @@ class App extends Component {
           "password": "password"
         }
       }
-      console.log(await axios.get(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/testApi'))
-      console.log(await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/login', dataJSON))
+      // console.log(await axios.get(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/testApi'))
+      await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/login', dataJSON, {
+        withCredentials: true
+      })
+      await axios.get(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/verify', {
+        withCredentials: true
+      })
     } catch (err) {
       console.log(err)
     }
