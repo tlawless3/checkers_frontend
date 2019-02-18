@@ -1,16 +1,42 @@
 import React, {
   Component
 } from 'react';
+import axios from 'axios'
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+
+  async verifyUser() {
+    try {
+      let dataJSON = {
+        "user": {
+          "username": "newnew",
+          "password": "password"
+        }
+      }
+      console.log(await axios.get(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/testApi'))
+      console.log(await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/login', dataJSON))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  componentDidMount() {
+    this.verifyUser()
+  }
+
   render() {
+
     return (
-      <div className="App" >
-        hello world
-      </div>
-    );
+      true ?
+        (<div className="App" >
+          loggedIn
+         </div>
+        ) : (
+          <div>
+            not logged in
+      </div>)
+    )
   }
 }
 
