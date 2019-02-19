@@ -1,6 +1,7 @@
 import React, {
   Component
 } from 'react';
+import { Login } from './components/index'
 import axios from 'axios'
 import logo from './logo.svg';
 import './App.css';
@@ -16,16 +17,17 @@ class App extends Component {
 
   async verifyUser() {
     try {
-      // let dataJSON = {
-      //   "user": {
-      //     "username": "newnew",
-      //     "password": "password"
-      //   }
-      // }
-      // // console.log(await axios.get(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/testApi'))
-      // await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/login', dataJSON, {
-      //   withCredentials: true
-      // })
+      //this login stuff will be handled on the login screen at a later point
+      let dataJSON = {
+        "user": {
+          "username": "newnew",
+          "password": "password"
+        }
+      }
+      // console.log(await axios.get(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/testApi'))
+      await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/login', dataJSON, {
+        withCredentials: true
+      })
       let result = await axios.get(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/verify', {
         withCredentials: true
       })
@@ -37,21 +39,30 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.setState({
+      userRole: 'loading'
+    })
     this.verifyUser()
   }
 
   render() {
-
-    return (
-      this.state.userRole === 'user' ?
-        (<div className="App" >
-          loggedIn
-         </div>
-        ) : (
-          <div>
-            not logged in
-      </div>)
-    )
+    const rolesWithPermissions = ['user', 'admin']
+    if (this.state.userRole === 'loading') {
+      return (
+        <div>
+          loading
+        </div>
+      )
+    } else if (rolesWithPermissions.includes(this.state.userRole)) {
+      return (<div>
+        home
+      </div>
+      )
+    } else {
+      return (
+        <Login />
+      )
+    }
   }
 }
 
