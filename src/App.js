@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { connect } from 'react-redux'
 import { Login } from './components/index'
-import { simpleAction } from './actions/user';
+import { getUserToken } from './actions/user';
 import axios from 'axios'
 import logo from './logo.svg';
 import './App.css';
@@ -38,7 +38,7 @@ class App extends Component {
             JSON.stringify(this.props)
           }
         </pre>
-        <button onClick={() => this.simpleActionSequel()}>Test redux action</button>
+        <button onClick={() => this.props.getUserToken()}>Test redux action</button>
         loading
       </div>
     )
@@ -70,7 +70,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  simpleAction: () => dispatch(simpleAction())
+  getUserToken: () => dispatch(getUserToken())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
