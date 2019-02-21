@@ -1,8 +1,15 @@
 export default (state = {}, action) => {
   switch (action.type) {
-    case 'GET_USER':
+    case 'REQUEST_USER':
       return {
-        user: action.payload
+        ...state,
+        isFetching: true
+      }
+    case 'RECIEVE_USER':
+      return {
+        ...state,
+        user: action.payload,
+        isFetching: false
       }
     default:
       return state

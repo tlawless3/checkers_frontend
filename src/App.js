@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { connect } from 'react-redux'
 import { Login } from './components/index'
-import { getUserToken } from './actions/user';
+import { getUserConditonally } from './actions/user';
 import axios from 'axios'
 import logo from './logo.svg';
 import './App.css';
@@ -38,7 +38,7 @@ class App extends Component {
             JSON.stringify(this.props)
           }
         </pre>
-        <button onClick={() => this.props.getUserToken()}>Test redux action</button>
+        <button onClick={() => this.props.getUserConditonally()}>Test redux action</button>
         loading
       </div>
     )
@@ -70,7 +70,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getUserToken: () => dispatch(getUserToken())
+  getUserConditonally: () => dispatch(getUserConditonally())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
