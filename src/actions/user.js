@@ -14,8 +14,9 @@ export const requestUser = payload => ({
 
 
 //these three funcs log user in if there is no user in state and token is valid
-export const getUserConditonally = (state) => (dispatch, state) => {
-  if (shouldGetUser(state)) {
+export const getUserConditonally = () => (dispatch, getState) => {
+  console.log('=======', shouldGetUser(getState()))
+  if (shouldGetUser(getState())) {
     return dispatch(getUserByToken(dispatch))
   }
 }
@@ -32,7 +33,8 @@ const getUserByToken = () => async (dispatch) => {
 }
 
 const shouldGetUser = (state) => {
-  const user = state.user
+  console.log('----', state)
+  const user = state.userReducer.user
   if (!user) {
     return true
   } else if (user.isFetching) {

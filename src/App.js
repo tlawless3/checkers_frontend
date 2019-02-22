@@ -38,7 +38,7 @@ class App extends Component {
             JSON.stringify(this.props)
           }
         </pre>
-        <button onClick={() => this.props.getUserConditonally()}>Test redux action</button>
+        <button onClick={() => this.props.getUserConditonally(this.props.user)}>Test redux action</button>
         loading
       </div>
     )
