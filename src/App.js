@@ -4,8 +4,6 @@ import React, {
 import { connect } from 'react-redux'
 import { Login } from './components/index'
 import { getUserConditonally } from './actions/user';
-import axios from 'axios'
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
@@ -14,7 +12,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.props.getUserConditonally(this.props.user)
+    // this.props.getUserConditonally(this.props.user)
   }
 
   render() {

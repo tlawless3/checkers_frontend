@@ -5,12 +5,24 @@ export const requestUser = payload => ({
   payload
 })
 
-// const userLogin = userLogin => {
-//   dispatch(requestUserLogin)
-//   const user = await axios.get(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/verify', {
-//     withCredentials: true
-//   })
-// }
+export const userLogin = (userLogin) => async (dispatch) => {
+  console.log('---', userLogin)
+  dispatch(requestUser)
+  try {
+    const user = await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/login', {
+      withCredentials: true,
+      data: userLogin
+    })
+    dispatch({
+      type: 'RECIEVE_USER',
+      payload: user
+    })
+  } catch {
+    dispatch({
+      type: 'RECIEVE_USER'
+    })
+  }
+}
 
 
 //these three funcs 'log user in' if there is no user in state and token is valid
