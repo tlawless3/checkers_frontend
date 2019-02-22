@@ -1,6 +1,7 @@
 import React, {
   Component
 } from 'react';
+import LoginForm from './loginForm/loginForm'
 import './login.css';
 
 class Login extends Component {
@@ -11,10 +12,14 @@ class Login extends Component {
   componentDidMount() {
   }
 
+  loginUser() {
+
+  }
+
   render() {
     return (
       <div>
-        login
+        <LoginForm />
       </div>
     )
   }

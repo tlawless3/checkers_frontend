@@ -11,57 +11,35 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props)
-    // this.state = {
-    //   userRole: 'user'
-    // }
-    // this.verifyUser = this.verifyUser.bind(this)
   }
 
   componentDidMount() {
-    // this.setState({
-    //   userRole: 'loading'
-    // })
-    // this.verifyUser()
-  }
-
-  simpleActionSequel = (event) => {
-    console.log(this.props)
-    console.log(this.props.simpleAction)
-    this.props.simpleAction()
+    this.props.getUserConditonally(this.props.user)
   }
 
   render() {
-    return (
-      <div>
-        <pre>
-          {
-            JSON.stringify(this.props)
-          }
-        </pre>
-        <button onClick={() => this.props.getUserConditonally(this.props.user)}>Test redux action</button>
-        loading
-      </div>
-    )
-    //   const rolesWithPermissions = ['user', 'admin']
-    //   if (true) {
-    //     return (
-    //       <div>
-    //         <button onClick={this.simpleActionSequel}>Test redux action</button>
-    //         loading
-    //       </div>
-    //     )
-    //   } else if (rolesWithPermissions.includes(this.state.userRole)) {
-    //     return (<div>
-    //       <button onClick={this.simpleActionSequel}>Test redux action</button>
-    //       home
-    //     </div>
-    //     )
-    //   } else {
-    //     return (
-    //       <Login />
-    //     )
-    //   }
-    // }
+    console.log(this.props)
+    if (this.props.userReducer.isFetching) {
+      return (<div>
+        Loading
+      </div>)
+    } else if (this.props.userReducer.user) {
+      return (
+        <div>
+          <pre>
+            {
+              JSON.stringify(this.props)
+            }
+          </pre>
+          <button onClick={() => this.props.getUserConditonally(this.props.userReducer)}>Test redux action</button>
+          loading
+        </div>
+      )
+    } else {
+      return (
+        <Login />
+      )
+    }
   }
 }
 

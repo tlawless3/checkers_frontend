@@ -3,6 +3,9 @@ import {
   applyMiddleware,
   combineReducers
 } from 'redux';
+import {
+  composeWithDevTools
+} from 'redux-devtools-extension/logOnlyInProduction';
 import thunk from 'redux-thunk';
 import userReducer from '../reducers/user';
 
@@ -15,6 +18,8 @@ export default function configureStore(initialState = {}) {
   return createStore(
     rootReducer,
     initialState,
-    applyMiddleware(thunk)
+    composeWithDevTools(
+      applyMiddleware(thunk)
+    )
   );
 }
