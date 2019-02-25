@@ -12,11 +12,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // this.props.getUserConditonally(this.props.user)
+    if (!this.props.user) {
+      this.props.getUserConditonally(this.props.user)
+    }
   }
 
   render() {
-    console.log(this.props)
     if (this.props.userReducer.isFetching) {
       return (<div>
         Loading

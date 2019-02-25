@@ -9,13 +9,16 @@ import './login.css';
 class Login extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      error: false,
+    }
     this.handleLogin = this.handleLogin.bind(this)
   }
 
   componentDidMount() {
   }
 
-  handleLogin(event) {
+  async handleLogin(event) {
     event.preventDefault()
     const userObj = {
       "user": {
@@ -23,14 +26,25 @@ class Login extends Component {
         "password": event.target.password.value
       }
     }
-    this.props.userLogin(userObj)
+    await this.props.userLogin(userObj)
+    if (!this.props.userReducer.user) {
+      this.setState({
+        error: true
+      })
+    } else {
+      this.setState({
+        error: false
+      })
+    }
   }
 
   render() {
     return (
-      <div>
-        LOGIN
-        <LoginForm handleLogin={this.handleLogin} />
+      <div className='loginPageWrapper'>
+        <div className='checkerWrapper'>
+          <img id='circles' src={require('../../assets/overlappingCircles.svg')}></img>
+        </div>
+        <LoginForm handleLogin={this.handleLogin} error={this.state.error} />
       </div>
     )
   }
