@@ -6,7 +6,6 @@ export const requestUser = payload => ({
 })
 
 export const userLogin = (userLogin) => async (dispatch) => {
-  console.log('---', userLogin)
   dispatch(requestUser)
   try {
     const user = await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/login', userLogin, {

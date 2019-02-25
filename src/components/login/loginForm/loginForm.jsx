@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom'
 import './loginForm.css';
 
 const LoginForm = (props) => {
@@ -13,6 +14,9 @@ const LoginForm = (props) => {
         <input type='password' name='password' placeholder='password' />
         <button type='submit'> Submit </button>
       </form>
+      <div className='createLink'>
+        <NavLink to='/create'>Create an Account</NavLink>
+      </div>
     </div>
   )
 }

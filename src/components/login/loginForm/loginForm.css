@@ -51,3 +51,10 @@
   width: 100px;
   height: 40px;
 }
+
+.createLink {
+  position: fixed;
+  font-size: 15px;
+  bottom: 5px;
+  right: 5px;
+}

@@ -2,8 +2,9 @@ import React, {
   Component
 } from 'react';
 import { connect } from 'react-redux'
-import { Login } from './components/index'
+import { Login, Create } from './components/index'
 import { getUserConditonally } from './actions/user';
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import './App.css';
 
 class App extends Component {
@@ -36,7 +37,13 @@ class App extends Component {
       )
     } else {
       return (
-        <Login />
+        <div>
+          <Switch>
+            <Route path='/create' component={Create} />
+            <Route path='/login' component={Login} />
+            <Redirect from='/' to='/login' />
+          </Switch>
+        </div>
       )
     }
   }
@@ -50,4 +57,4 @@ const mapDispatchToProps = dispatch => ({
   getUserConditonally: () => dispatch(getUserConditonally())
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
