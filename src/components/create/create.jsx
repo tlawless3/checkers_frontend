@@ -20,7 +20,12 @@ class Create extends Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  validateFields() {
+  validateFieldsAndSubmit() {
+    const validateEmail = () => {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(this.state.email).toLowerCase());
+    }
+
     let message = ''
     if (!this.state.username) {
       message += 'Enter a username \n'
@@ -34,23 +39,8 @@ class Create extends Component {
     if (this.state.password !== this.state.passwordConfirm) {
       message += 'Passwords do not match \n'
     }
-    if (message.length > 0) {
-      this.setState({
-        error: true,
-        errorMessage: message
-      })
-    } else {
-      this.setState({
-        error: false,
-        errorMessage: ''
-      })
-    }
-  }
-
-  validateUpdate() {
-    let message = ''
-    if (this.state.password !== this.state.passwordConfirm && this.state.password && this.state.passwordConfirm) {
-      message += 'Passwords do not match \n'
+    if (this.state.email && !validateEmail()) {
+      message += 'Enter a valid email \n'
     }
     if (message.length > 0) {
       this.setState({
@@ -62,6 +52,7 @@ class Create extends Component {
         error: false,
         errorMessage: ''
       })
+      //pass the submit user function here
     }
   }
 
@@ -70,13 +61,12 @@ class Create extends Component {
     const value = event.target.value
     const stateObj = {}
     stateObj[key] = value
-    this.setState(stateObj, () => this.validateUpdate())
+    this.setState(stateObj)
   }
 
   handleCreate(event) {
     event.preventDefault()
-    this.validateFields()
-    console.log('====', this.state)
+    this.validateFieldsAndSubmit()
   }
 
   render() {
