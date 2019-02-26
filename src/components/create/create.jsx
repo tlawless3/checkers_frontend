@@ -1,8 +1,9 @@
 import React, {
   Component
-} from 'react';
+} from 'react'
+import axios from 'axios'
 import CreateForm from './createForm/createForm'
-import './create.css';
+import './create.css'
 
 class Create extends Component {
   constructor(props) {
@@ -20,15 +21,24 @@ class Create extends Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  validateFieldsAndSubmit() {
+  async validateFieldsAndSubmit() {
     const validateEmail = () => {
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(this.state.email).toLowerCase());
     }
 
+    const checkUsernameAvailable = async () => {
+      let available = await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/available', { user: { username: this.state.username } }, {
+        withCredentials: true,
+      })
+      return available.data.available
+    }
+
     let message = ''
     if (!this.state.username) {
       message += 'Enter a username \n'
+    } else if (! await checkUsernameAvailable()) {
+      message += 'Username not available \n'
     }
     if (!this.state.password) {
       message += 'Enter a password \n'
@@ -52,7 +62,7 @@ class Create extends Component {
         error: false,
         errorMessage: ''
       })
-      //pass the submit user function here
+      //pass the submit user function ^here
     }
   }
 
