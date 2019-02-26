@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { connect } from 'react-redux'
 import { Login, Create } from './components/index'
-import { getUserConditonally } from './actions/user';
+import { getUserConditionally } from './actions/user';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import './App.css';
 
@@ -14,7 +14,7 @@ class App extends Component {
 
   componentDidMount() {
     if (!this.props.user) {
-      this.props.getUserConditonally(this.props.user)
+      this.props.getUserConditionally(this.props.user)
     }
   }
 
@@ -31,7 +31,7 @@ class App extends Component {
               JSON.stringify(this.props)
             }
           </pre>
-          <button onClick={() => this.props.getUserConditonally(this.props.userReducer)}>Test redux action</button>
+          <button onClick={() => this.props.getUserConditionally(this.props.userReducer)}>Test redux action</button>
           loading
         </div>
       )
@@ -54,7 +54,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  getUserConditonally: () => dispatch(getUserConditonally())
+  getUserConditionally: () => dispatch(getUserConditionally())
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

@@ -2,8 +2,10 @@ import React, {
   Component
 } from 'react'
 import axios from 'axios'
+import { getUserConditionally } from '../../actions/user'
 import CreateForm from './createForm/createForm'
 import './create.css'
+import { connect } from 'react-redux'
 
 class Create extends Component {
   constructor(props) {
@@ -61,6 +63,18 @@ class Create extends Component {
       this.setState({
         error: false,
         errorMessage: ''
+      }, () => {
+        const displayNameVar = this.state.displayName.length > 0 ? this.state.displayName : this.state.username
+        axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/create', {
+          user: {
+            username: this.state.username,
+            displayName: displayNameVar,
+            email: this.state.email,
+            password: this.state.password
+          }
+        }, { withCredentials: true }).then(() => { this.props.getUserConditionally() }).then(() => {
+          this.props.history.push('/home')
+        })
       })
       //pass the submit user function ^here
     }
@@ -88,4 +102,8 @@ class Create extends Component {
   }
 }
 
-export default Create
+const mapDispatchToProps = dispatch => ({
+  getUserConditionally: () => dispatch(getUserConditionally())
+})
+
+export default connect(null, mapDispatchToProps)(Create)

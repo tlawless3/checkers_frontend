@@ -24,7 +24,7 @@ export const userLogin = (userLogin) => async (dispatch) => {
 
 
 //these three funcs 'log user in' if there is no user in state and token is valid
-export const getUserConditonally = () => (dispatch, getState) => {
+export const getUserConditionally = () => (dispatch, getState) => {
   if (shouldGetUser(getState())) {
     return dispatch(getUserByToken(dispatch))
   }
