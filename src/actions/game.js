@@ -32,13 +32,10 @@ export const fetchGamesConditionally = () => (dispatch, getState) => {
 const shouldGetGame = (state) => {
   const reducer = state.gameReducer
   if (!reducer.games) {
-    console.log('true')
     return true
   } else if (reducer.isFetching) {
-    console.log('false')
     return false
   } else {
-    console.log('false')
     return false
   }
 }

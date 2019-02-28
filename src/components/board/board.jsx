@@ -19,7 +19,7 @@ class Board extends Component {
   }
 
   drawBoard() {
-    const board = [["red", "empty", "red", "empty", "red", "empty", "red", "empty"], ["empty", "red", "empty", "red", "empty", "red", "empty", "red"], ["red", "empty", "red", "empty", "red", "empty", "red", "empty"], ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"], ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"], ["empty", "black", "empty", "black", "empty", "black", "empty", "black"], ["black", "empty", "black", "empty", "black", "empty", "black", "empty"], ["empty", "black", "empty", "black", "empty", "black", "empty", "black"]]
+    const board = this.props.activeGameReducer.activeGame.board
     const resolution = 800
     const rows = board.length
     const ratio = (resolution / rows)
@@ -69,7 +69,7 @@ class Board extends Component {
     const canvas = ReactDOM.findDOMNode(this.refs.boardCanvas)
     const ctx = canvas.getContext('2d')
 
-    const board = [["red", "empty", "red", "empty", "red", "empty", "red", "empty"], ["empty", "red", "empty", "red", "empty", "red", "empty", "red"], ["red", "empty", "red", "empty", "red", "empty", "red", "empty"], ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"], ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"], ["empty", "black", "empty", "black", "empty", "black", "empty", "black"], ["black", "empty", "black", "empty", "black", "empty", "black", "empty"], ["empty", "black", "empty", "black", "empty", "black", "empty", "black"]]
+    const board = this.props.activeGameReducer.activeGame.board
     const resolution = 800
     const rows = board.length
     const ratio = (resolution / rows)
@@ -109,7 +109,7 @@ class Board extends Component {
   }
 
   handleClick(event) {
-    const board = [["red", "empty", "red", "empty", "red", "empty", "red", "empty"], ["empty", "red", "empty", "red", "empty", "red", "empty", "red"], ["red", "empty", "red", "empty", "red", "empty", "red", "empty"], ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"], ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"], ["empty", "black", "empty", "black", "empty", "black", "empty", "black"], ["black", "empty", "black", "empty", "black", "empty", "black", "empty"], ["empty", "black", "empty", "black", "empty", "black", "empty", "black"]]
+    const board = this.props.activeGameReducer.activeGame.board
     const resolution = 800
     const rows = board.length
     const ratio = (resolution / rows)

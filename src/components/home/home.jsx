@@ -2,6 +2,7 @@ import React, {
   Component
 } from 'react';
 import { connect } from 'react-redux'
+import './home.css'
 import { Board } from '../index'
 import { fetchGamesConditionally } from '../../actions/game'
 import { setActiveGame } from '../../actions/activeGame'
@@ -21,7 +22,7 @@ class Home extends Component {
   render() {
     return (
       <div className='homePageWrapper' onClick={() => this.props.setActiveGame()}>
-        <Board />
+        {this.props.activeGameReducer.activeGame ? <Board /> : ''}
       </div>
     )
   }
