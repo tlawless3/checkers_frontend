@@ -19,12 +19,10 @@ class Board extends Component {
   }
 
   drawBoard() {
-    const board = this.props.activeGameReducer.activeGame.board
-    const resolution = 800
+    const board = this.props.board
+    const resolution = this.props.resolution
     const rows = board.length
     const ratio = (resolution / rows)
-
-    console.log(ratio)
 
     const canvas = ReactDOM.findDOMNode(this.refs.boardCanvas)
     const ctx = canvas.getContext('2d')
@@ -69,12 +67,11 @@ class Board extends Component {
     const canvas = ReactDOM.findDOMNode(this.refs.boardCanvas)
     const ctx = canvas.getContext('2d')
 
-    const board = this.props.activeGameReducer.activeGame.board
-    const resolution = 800
+    const board = this.props.board
+    const resolution = this.props.resolution
     const rows = board.length
     const ratio = (resolution / rows)
     const padding = (ratio / 10)
-    console.log(padding)
     const radius = ((ratio - (padding * 2)) / 2)
 
     //for loop goes through every square and draws pieces
@@ -109,8 +106,8 @@ class Board extends Component {
   }
 
   handleClick(event) {
-    const board = this.props.activeGameReducer.activeGame.board
-    const resolution = 800
+    const board = this.props.board
+    const resolution = this.props.resolution
     const rows = board.length
     const ratio = (resolution / rows)
 
@@ -139,7 +136,7 @@ class Board extends Component {
   render() {
     return (
       <div className='boardWrapper'>
-        <canvas onClick={this.handleClick} className='board' ref='boardCanvas' />
+        <canvas onClick={this.props.active ? this.handleClick : null} className='board' ref='boardCanvas' />
       </div>
     )
   }

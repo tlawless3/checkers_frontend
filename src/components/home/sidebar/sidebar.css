@@ -1,0 +1,4 @@
+.sidebarWrapper {
+  display: flex;
+  flex-direction: column;
+}

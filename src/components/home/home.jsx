@@ -4,6 +4,7 @@ import React, {
 import { connect } from 'react-redux'
 import './home.css'
 import { Board } from '../index'
+import Sidebar from './sidebar/sidebar'
 import { fetchGamesConditionally } from '../../actions/game'
 import { setActiveGame } from '../../actions/activeGame'
 
@@ -21,8 +22,9 @@ class Home extends Component {
 
   render() {
     return (
-      <div className='homePageWrapper' onClick={() => this.props.setActiveGame()}>
-        {this.props.activeGameReducer.activeGame ? <Board /> : ''}
+      <div className='homePageWrapper'>
+        {this.props.activeGameReducer.activeGame ? <Board board={this.props.activeGameReducer.activeGame.board} resolution={640} active={true} /> : ''}
+        {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} games={this.props.gameReducer.games} /> : ''}
       </div>
     )
   }
@@ -34,7 +36,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchGamesConditionally: () => dispatch(fetchGamesConditionally()),
-  setActiveGame: () => dispatch(setActiveGame())
+  setActiveGame: (gameId) => dispatch(setActiveGame(gameId))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
