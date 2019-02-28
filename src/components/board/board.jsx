@@ -9,10 +9,12 @@ class Board extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      error: false,
+      selected: false,
     }
 
     this.drawBoard = this.drawBoard.bind(this)
+    this.drawPieces = this.drawPieces.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   drawBoard() {
@@ -101,10 +103,30 @@ class Board extends Component {
     this.drawPieces()
   }
 
+  checkValidMove() {
+
+  }
+
+  handleClick(event) {
+    const board = [["red", "empty", "red", "empty", "red", "empty", "red", "empty"], ["empty", "red", "empty", "red", "empty", "red", "empty", "red"], ["red", "empty", "red", "empty", "red", "empty", "red", "empty"], ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"], ["empty", "empty", "empty", "empty", "empty", "empty", "empty", "empty"], ["empty", "black", "empty", "black", "empty", "black", "empty", "black"], ["black", "empty", "black", "empty", "black", "empty", "black", "empty"], ["empty", "black", "empty", "black", "empty", "black", "empty", "black"]]
+    const resolution = 800
+    const rows = board.length
+    const ratio = (resolution / rows)
+
+    const canvas = event.target
+    const rect = canvas.getBoundingClientRect()
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    const column = (Math.floor(x / ratio))
+    const row = (Math.floor(y / ratio))
+    const square = board[row][column]
+    console.log(this.props.userReducer)
+  }
+
   render() {
     return (
       <div className='boardWrapper'>
-        <canvas onClick={this.props.handleClick} className='board' ref='boardCanvas' />
+        <canvas onClick={this.handleClick} className='board' ref='boardCanvas' />
       </div>
     )
   }
