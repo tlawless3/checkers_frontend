@@ -2,7 +2,7 @@ import React, {
   Component
 } from 'react';
 import { connect } from 'react-redux'
-import { Login, Create } from './components/index'
+import { Login, Create, Home } from './components/index'
 import { getUserConditionally } from './actions/user';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import './App.css';
@@ -26,13 +26,10 @@ class App extends Component {
     } else if (this.props.userReducer.user) {
       return (
         <div>
-          <pre>
-            {
-              JSON.stringify(this.props)
-            }
-          </pre>
-          <button onClick={() => this.props.getUserConditionally(this.props.userReducer)}>Test redux action</button>
-          loading
+          <Switch>
+            <Route path='/home' component={Home} />
+            <Redirect from='/' to='/home' />
+          </Switch>
         </div>
       )
     } else {

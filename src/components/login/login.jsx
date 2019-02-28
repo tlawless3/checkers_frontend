@@ -15,9 +15,6 @@ class Login extends Component {
     this.handleLogin = this.handleLogin.bind(this)
   }
 
-  componentDidMount() {
-  }
-
   async handleLogin(event) {
     event.preventDefault()
     const userObj = {
