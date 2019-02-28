@@ -136,7 +136,7 @@ class Board extends Component {
   render() {
     return (
       <div className='boardWrapper'>
-        <canvas onClick={this.props.active ? this.handleClick : null} className='board' ref='boardCanvas' />
+        <canvas onClick={this.props.active ? this.handleClick : () => null} className='board' ref='boardCanvas' />
       </div>
     )
   }

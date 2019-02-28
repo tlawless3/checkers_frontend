@@ -24,7 +24,7 @@ class Home extends Component {
     return (
       <div className='homePageWrapper'>
         {this.props.activeGameReducer.activeGame ? <Board board={this.props.activeGameReducer.activeGame.board} resolution={640} active={true} /> : ''}
-        {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} games={this.props.gameReducer.games} /> : ''}
+        {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} user={this.props.userReducer.user} games={this.props.gameReducer.games} /> : ''}
       </div>
     )
   }
