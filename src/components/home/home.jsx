@@ -10,12 +10,22 @@ class Home extends Component {
     this.state = {
       error: false,
     }
+
+    this.handleBoardClick = this.handleBoardClick.bind(this)
+  }
+
+  handleBoardClick(event) {
+    const canvas = event.target
+    const rect = canvas.getBoundingClientRect()
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    console.log("x: " + x + " y: " + y);
   }
 
   render() {
     return (
       <div className='homePageWrapper'>
-        <Board />
+        <Board handleClick={this.handleBoardClick} />
       </div>
     )
   }
