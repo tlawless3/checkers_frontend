@@ -2,16 +2,20 @@ import {
   createStore,
   applyMiddleware,
   combineReducers
-} from 'redux';
+} from 'redux'
 import {
   composeWithDevTools
-} from 'redux-devtools-extension/logOnlyInProduction';
-import thunk from 'redux-thunk';
-import userReducer from '../reducers/user';
+} from 'redux-devtools-extension/logOnlyInProduction'
+import thunk from 'redux-thunk'
+import userReducer from '../reducers/user'
+import gameReducer from '../reducers/game'
+import activeGameReducer from '../reducers/activeGame'
 
 //put reducers into combine reducers func
 const rootReducer = combineReducers({
-  userReducer
+  userReducer,
+  gameReducer,
+  activeGameReducer
 })
 
 export default function configureStore(initialState = {}) {

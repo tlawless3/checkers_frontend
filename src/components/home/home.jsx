@@ -1,8 +1,10 @@
 import React, {
   Component
 } from 'react';
-import { Board } from '../index'
 import { connect } from 'react-redux'
+import { Board } from '../index'
+import { fetchGamesConditionally } from '../../actions/game'
+import { setActiveGame } from '../../actions/activeGame'
 
 class Home extends Component {
   constructor(props) {
@@ -12,9 +14,13 @@ class Home extends Component {
     }
   }
 
+  componentDidMount() {
+    this.props.fetchGamesConditionally()
+  }
+
   render() {
     return (
-      <div className='homePageWrapper'>
+      <div className='homePageWrapper' onClick={() => this.props.setActiveGame()}>
         <Board />
       </div>
     )
@@ -26,6 +32,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  fetchGamesConditionally: () => dispatch(fetchGamesConditionally()),
+  setActiveGame: () => dispatch(setActiveGame())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

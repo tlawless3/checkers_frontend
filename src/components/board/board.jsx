@@ -10,6 +10,7 @@ class Board extends Component {
     super(props)
     this.state = {
       selected: false,
+      selectedSquare: {}
     }
 
     this.drawBoard = this.drawBoard.bind(this)
@@ -120,7 +121,19 @@ class Board extends Component {
     const column = (Math.floor(x / ratio))
     const row = (Math.floor(y / ratio))
     const square = board[row][column]
-    console.log(this.props.userReducer)
+    if (!this.state.selected) {
+      this.setState({
+        selectedSquare: { x: column, y: row },
+        selected: true
+      })
+    } else if (this.state.selected) {
+      //check valid move
+      //update state accordingly
+      this.setState({
+        selectedSquare: {},
+        selected: false
+      })
+    }
   }
 
   render() {
