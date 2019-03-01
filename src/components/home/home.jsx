@@ -19,7 +19,8 @@ class Home extends Component {
 
   componentDidMount() {
     this.props.fetchGamesConditionally().then(() => {
-      this.props.setActiveGame(loadState().activeGame.id)
+      const activeGameId = loadState()
+      !activeGameId || this.props.setActiveGame(activeGameId.activeGame.id)
     })
   }
 
