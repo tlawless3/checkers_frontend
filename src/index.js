@@ -6,9 +6,17 @@ import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import configureStore from './store/store';
+import { saveState } from './localstorage';
+
+
+const store = configureStore()
+
+store.subscribe(() => {
+  saveState(store.getState().activeGameReducer)
+})
 
 ReactDOM.render(
-  <Provider store={configureStore()}>
+  <Provider store={store}>
     <BrowserRouter>
       < App />
     </BrowserRouter>

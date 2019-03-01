@@ -7,6 +7,7 @@ import { Board } from '../index'
 import Sidebar from './sidebar/sidebar'
 import { fetchGamesConditionally } from '../../actions/game'
 import { setActiveGame } from '../../actions/activeGame'
+import { loadState } from '../../localstorage'
 
 class Home extends Component {
   constructor(props) {
@@ -17,13 +18,17 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchGamesConditionally()
+    this.props.fetchGamesConditionally().then(() => {
+      this.props.setActiveGame(loadState().activeGame.id)
+    })
   }
 
   render() {
     return (
       <div className='homePageWrapper'>
-        {this.props.activeGameReducer.activeGame ? <Board board={this.props.activeGameReducer.activeGame.board} resolution={640} active={true} /> : ''}
+        <div className='activeBoardWrapper'>
+          {this.props.activeGameReducer.activeGame ? <Board className='activeBoard' board={this.props.activeGameReducer.activeGame.board} resolution={640} active={true} /> : ''}
+        </div>
         {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} user={this.props.userReducer.user} games={this.props.gameReducer.games} /> : ''}
       </div>
     )

@@ -10,9 +10,12 @@ import thunk from 'redux-thunk'
 import userReducer from '../reducers/user'
 import gameReducer from '../reducers/game'
 import activeGameReducer from '../reducers/activeGame'
+import {
+  loadState
+} from '../localstorage'
 
 //put reducers into combine reducers func
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   userReducer,
   gameReducer,
   activeGameReducer

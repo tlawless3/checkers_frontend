@@ -1,3 +1,14 @@
-body {
+.homePageWrapper {
+  width: 100vw;
+  height: 100vh;
   background-color: #8bb1ef;
+}
+
+.activeBoardWrapper {
+  position: absolute;
+  /* half of vw minus 1/2 width of board and sidebar  */
+  left: calc(50vw - 430px);
+  height: 100vh;
+  display: flex;
+  align-items: center;
 }

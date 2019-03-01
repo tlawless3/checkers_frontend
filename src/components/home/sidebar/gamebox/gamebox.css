@@ -2,12 +2,9 @@
   margin: 0 3px 3px 0;
   min-height: 100px;
   width: 220px;
-  background-color: #8bb1ef;
+  background-color: #1b56b7;
   display: flex;
   align-items: center;
-  border-style: solid;
-  border-color: #1b56b7;
-  border-width: 2px;
 }
 
 .gameInfo {
