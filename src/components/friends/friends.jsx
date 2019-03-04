@@ -6,25 +6,42 @@ import {
 } from '../index'
 import { connect } from 'react-redux'
 import './friends.css';
-import { fetchGamesConditionally } from '../../actions/game'
-import { setActiveGame } from '../../actions/activeGame'
-import { loadState } from '../../localstorage'
+import { fetchFriends, fetchRecievedRequests, fetchSentRequests } from '../../actions/friend'
 
 class Friends extends Component {
   constructor(props) {
     super(props)
+
+    this.isFetching = this.isFetching.bind(this)
+  }
+
+  isFetching() {
+    if (!this.props.friendReducer.isFetchingFriends && !this.props.friendReducer.isFetchingSent && !this.props.friendReducer.isFetchingRecieved) {
+      return false
+    } else {
+      return true
+    }
   }
 
   componentDidMount() {
+    this.props.fetchFriends()
+    this.props.fetchRecievedRequests()
+    this.props.fetchSentRequests()
   }
 
   render() {
-    return (
-      <div className='friendsPageWrapper'>
-        <Navbar />
-        Friends
-      </div>
-    )
+    if (this.isFetching()) {
+      return (<div>
+        loading
+      </div>)
+    } else {
+      return (
+        <div className='friendsPageWrapper'>
+          <Navbar />
+          Friends
+        </div>
+      )
+    }
   }
 }
 
@@ -33,8 +50,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  fetchGamesConditionally: () => dispatch(fetchGamesConditionally()),
-  setActiveGame: (gameId) => dispatch(setActiveGame(gameId))
+  fetchFriends: () => dispatch(fetchFriends()),
+  fetchRecievedRequests: () => dispatch(fetchRecievedRequests()),
+  fetchSentRequests: () => dispatch(fetchSentRequests()),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Friends);

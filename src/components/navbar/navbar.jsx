@@ -29,7 +29,7 @@ class Navbar extends Component {
     return (
       <div className='navbar'>
         <div className='left'>
-          <NavLink to='/home'>
+          <NavLink to='/home' className='link'>
             <div className='home button'>
               Home
             </div>
@@ -37,7 +37,7 @@ class Navbar extends Component {
           <div className='createGame button'>
             Create Game
           </div>
-          <NavLink to='/friends'>
+          <NavLink to='/friends' className='link'>
             <div className='friends button'>
               Friends
             </div>
