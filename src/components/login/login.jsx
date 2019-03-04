@@ -24,7 +24,7 @@ class Login extends Component {
       }
     }
     this.props.userLogin(userObj)
-    if (!this.props.userReducer.user) {
+    if (!this.props.userReducer.user && !this.props.userReducer.isFetching) {
       this.setState({
         error: true
       })

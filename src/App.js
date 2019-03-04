@@ -2,7 +2,7 @@ import React, {
   Component
 } from 'react';
 import { connect } from 'react-redux'
-import { Login, Create, Home } from './components/index'
+import { Login, Create, Home, Friends } from './components/index'
 import { getUserConditionally } from './actions/user';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import './App.css';
@@ -19,20 +19,17 @@ class App extends Component {
   }
 
   render() {
-    if (this.props.userReducer.isFetching) {
-      return (<div>
-        Loading
-      </div>)
-    } else if (this.props.userReducer.user) {
+    if (this.props.userReducer.user) {
       return (
         <div>
           <Switch>
+            <Route path='/friends' component={Friends} />
             <Route path='/home' component={Home} />
             <Redirect from='/' to='/home' />
           </Switch>
         </div>
       )
-    } else {
+    } else if (this.props.userReducer.isFetching === false && !this.props.userReducer.user) {
       return (
         <div>
           <Switch>
@@ -42,6 +39,10 @@ class App extends Component {
           </Switch>
         </div>
       )
+    } else {
+      return (<div>
+        Loading
+      </div>)
     }
   }
 }

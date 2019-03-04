@@ -1,6 +1,5 @@
 .homePageWrapper {
   width: 100vw;
-  /* min-height: 100vh; */
   min-height: calc(100vh - 50px);
   height: 100%;
   background-color: #8bb1ef;

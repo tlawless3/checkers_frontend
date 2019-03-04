@@ -17,16 +17,12 @@ class Home extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.fetchGamesConditionally().then(() => {
-      const activeGameId = loadState()
-      !activeGameId || this.props.setActiveGame(activeGameId.activeGame.id)
-    })
+  async componentDidMount() {
+    await this.props.fetchGamesConditionally()
+    const activeGameId = loadState()
+    return activeGameId ? this.props.setActiveGame(activeGameId.activeGame.id) : () => null
   }
 
-  componentWillUnmount() {
-    this.props.setActiveGame(null)
-  }
 
   render() {
     return (

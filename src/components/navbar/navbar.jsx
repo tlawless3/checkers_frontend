@@ -2,6 +2,7 @@ import React, {
   Component
 } from 'react';
 import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom'
 import './navbar.css';
 
 class Navbar extends Component {
@@ -14,7 +15,6 @@ class Navbar extends Component {
 
   handleLogout() {
     const eraseCookie = (name) => {
-      // createCookie(name, "", -1);
       document.cookie = name + "=" + "" + "-1" + "; path=/";
     }
     const cookies = document.cookie.split(";");
@@ -29,12 +29,19 @@ class Navbar extends Component {
     return (
       <div className='navbar'>
         <div className='left'>
-          <div className='home button'>
-            Home
-          </div>
+          <NavLink to='/home'>
+            <div className='home button'>
+              Home
+            </div>
+          </NavLink>
           <div className='createGame button'>
             Create Game
           </div>
+          <NavLink to='/friends'>
+            <div className='friends button'>
+              Friends
+            </div>
+          </NavLink>
         </div>
         <div className='right'>
           <div className='logout button' onClick={this.handleLogout}>
