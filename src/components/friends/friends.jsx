@@ -7,10 +7,17 @@ import {
 import { connect } from 'react-redux'
 import './friends.css';
 import { fetchFriends, fetchRecievedRequests, fetchSentRequests } from '../../actions/friend'
+import FriendCard from './friendCard/friendCard'
+
 
 class Friends extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      activeFilter: 'all',
+      currentFriends: []
+    }
 
     this.isFetching = this.isFetching.bind(this)
   }
@@ -23,13 +30,52 @@ class Friends extends Component {
     }
   }
 
-  componentDidMount() {
-    this.props.fetchFriends()
-    this.props.fetchRecievedRequests()
-    this.props.fetchSentRequests()
+  createDataArr() {
+    const resultArr = []
+    if (this.state.activeFilter === 'all') {
+      this.props.friendReducer.friends.map(friend => {
+        resultArr.push(friend)
+      })
+      this.props.friendReducer.recievedRequests.map(request => {
+        resultArr.push(request)
+      })
+      this.props.friendReducer.sentRequests.map(request => {
+        resultArr.push(request)
+      })
+    } else if (this.state.activeFilter === 'friends') {
+      this.props.friendReducer.friends.map(friend => {
+        resultArr.push(friend)
+      })
+    } else if (this.state.activeFilter === 'recieved') {
+      this.props.friendReducer.recievedRequests.map(request => {
+        resultArr.push(request)
+      })
+    } else if (this.state.activeFilter === 'sent') {
+      this.props.friendReducer.sentRequests.map(request => {
+        resultArr.push(request)
+      })
+    }
+    this.setState({
+      currentFriends: resultArr
+    })
+  }
+
+  async handleFilterClick(filter) {
+    await this.setState({
+      activeFilter: filter
+    })
+    this.createDataArr()
+  }
+
+  async componentDidMount() {
+    await Promise.all([this.props.fetchFriends(),
+    this.props.fetchRecievedRequests(),
+    this.props.fetchSentRequests()])
+    this.createDataArr()
   }
 
   render() {
+    //maybe move isFetching into the page itself and have it render a lodaing screen over a template
     if (this.isFetching()) {
       return (<div>
         loading
@@ -38,7 +84,21 @@ class Friends extends Component {
       return (
         <div className='friendsPageWrapper'>
           <Navbar />
-          Friends
+          <div className='selectors'>
+            <div className={(this.state.activeFilter === 'all') ? 'selector activeFilter' : 'selector'} onClick={() => this.handleFilterClick('all')}>
+              All
+            </div>
+            <div className={(this.state.activeFilter === 'friends') ? 'selector activeFilter' : 'selector'} onClick={() => this.handleFilterClick('friends')}>
+              Friends
+            </div>
+            <div className={(this.state.activeFilter === 'sent') ? 'selector activeFilter' : 'selector'} onClick={() => this.handleFilterClick('sent')}>
+              Sent
+            </div>
+            <div className={(this.state.activeFilter === 'recieved') ? 'selector activeFilter' : 'selector'} onClick={() => this.handleFilterClick('recieved')}>
+              Recieved
+            </div>
+          </div>
+          {this.state.currentFriends.map(friend => <FriendCard friend={friend} />)}
         </div>
       )
     }

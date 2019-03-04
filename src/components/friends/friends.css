@@ -1,0 +1,24 @@
+.selectors {
+  display: flex;
+  margin-top: 50px;
+  justify-content: center;
+  font-size: 25px;
+}
+
+.selector {
+  margin: 15px 15px;
+  cursor: pointer;
+  padding: 0px 5px;
+}
+
+.friendsPageWrapper {
+  min-height: calc(100vh - 50px);
+  height: 100%;
+  background-color: #8bb1ef;
+}
+
+.activeFilter {
+  color: white;
+  background-color: #1b56b7;
+  border-radius: 10px;
+}
