@@ -21,6 +21,7 @@ class Navbar extends Component {
     for (let i = 0; i < cookies.length; i++) {
       eraseCookie(cookies[i].split("=")[0]);
     }
+    localStorage.clear()
     window.location.reload()
   }
 

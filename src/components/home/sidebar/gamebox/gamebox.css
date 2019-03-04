@@ -5,6 +5,7 @@
   background-color: #1b56b7;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .gameInfo {

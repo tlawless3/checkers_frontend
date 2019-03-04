@@ -1,16 +1,15 @@
 .homePageWrapper {
   width: 100vw;
-  height: 100%;
   min-height: 100vh;
+  height: 100%;
   background-color: #8bb1ef;
 }
 
 .activeBoardWrapper {
-  position: absolute;
-  /* half of vw minus 1/2 width of board and sidebar  */
-  left: calc(50vw - 430px);
   margin-top: 50px;
-  height: 100;
+  background-color: #8bb1ef;
   display: flex;
   align-items: center;
+  justify-content: center;
+  margin-right: 220px;
 }

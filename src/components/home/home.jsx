@@ -24,6 +24,10 @@ class Home extends Component {
     })
   }
 
+  componentWillUnmount() {
+    this.props.setActiveGame(null)
+  }
+
   render() {
     return (
       <div className='homePageWrapper'>
