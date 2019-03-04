@@ -23,12 +23,13 @@ class Login extends Component {
         "password": event.target.password.value
       }
     }
-    await this.props.userLogin(userObj)
+    this.props.userLogin(userObj)
     if (!this.props.userReducer.user) {
       this.setState({
         error: true
       })
-    } else {
+    }
+    else {
       this.setState({
         error: false
       })

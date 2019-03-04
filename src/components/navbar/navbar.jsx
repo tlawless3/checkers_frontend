@@ -13,7 +13,15 @@ class Navbar extends Component {
   }
 
   handleLogout() {
-    console.log(document.cookie)
+    const eraseCookie = (name) => {
+      // createCookie(name, "", -1);
+      document.cookie = name + "=" + "" + "-1" + "; path=/";
+    }
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      eraseCookie(cookies[i].split("=")[0]);
+    }
+    window.location.reload()
   }
 
   render() {
@@ -28,7 +36,7 @@ class Navbar extends Component {
           </div>
         </div>
         <div className='right'>
-          <div className='logout button'>
+          <div className='logout button' onClick={this.handleLogout}>
             Logout
           </div>
         </div>
