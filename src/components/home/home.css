@@ -1,13 +1,16 @@
 .homePageWrapper {
   width: 100vw;
-  min-height: 100vh;
+  /* min-height: 100vh; */
+  min-height: calc(100vh - 50px);
   height: 100%;
   background-color: #8bb1ef;
 }
 
 .activeBoardWrapper {
   margin-top: 50px;
+  height: 100%;
   background-color: #8bb1ef;
+  min-height: calc(100vh - 50px);
   display: flex;
   align-items: center;
   justify-content: center;
