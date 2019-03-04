@@ -4,7 +4,7 @@ import React, {
 import { connect } from 'react-redux'
 import './navbar.css';
 
-class Login extends Component {
+class Navbar extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -18,7 +18,20 @@ class Login extends Component {
 
   render() {
     return (
-      <div onClick={this.handleLogout} className='navbar'>
+      <div className='navbar'>
+        <div className='left'>
+          <div className='home button'>
+            Home
+          </div>
+          <div className='createGame button'>
+            Create Game
+          </div>
+        </div>
+        <div className='right'>
+          <div className='logout button'>
+            Logout
+          </div>
+        </div>
       </div>
     )
   }
@@ -31,4 +44,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

@@ -1,7 +1,12 @@
 .sidebarWrapper {
   position: fixed;
   overflow-y: scroll;
-  top: 0;
+  display: flex;
+  flex-direction: column;
+  top: 50px;
   right: 0;
-  height: 100%;
+  height: calc(100% - 50px);
+  min-height: calc(100vh - 50px);
+  width: 220px;
+  background-color: #5798f4;
 }

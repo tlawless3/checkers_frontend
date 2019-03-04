@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { connect } from 'react-redux'
 import './home.css'
-import { Board } from '../index'
+import { Board, Navbar } from '../index'
 import Sidebar from './sidebar/sidebar'
 import { fetchGamesConditionally } from '../../actions/game'
 import { setActiveGame } from '../../actions/activeGame'
@@ -27,6 +27,7 @@ class Home extends Component {
   render() {
     return (
       <div className='homePageWrapper'>
+        <Navbar />
         <div className='activeBoardWrapper'>
           {this.props.activeGameReducer.activeGame ? <Board className='activeBoard' board={this.props.activeGameReducer.activeGame.board} resolution={640} active={true} /> : ''}
         </div>
