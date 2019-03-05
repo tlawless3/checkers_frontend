@@ -90,14 +90,15 @@ class Friends extends Component {
     }
 
     const userObjs = userArr.map(async (friend) => {
-      const requestId = (friend.userId === this.props.userReducer.user.userId ? friend.friendId : friend.userId)
+      let status = findStatus(friend)
+      const requestId = ((status !== 'sent' && status !== 'friends') ? friend.userId : friend.friendId)
       try {
         const userInfo = await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/id', { user: { requestId } }, {
           withCredentials: true,
         })
         return ({
           userInfo: { ...userInfo.data, id: requestId },
-          status: findStatus(friend)
+          status
         })
       } catch (err) {
         console.error(err.message)
@@ -140,9 +141,9 @@ class Friends extends Component {
         this.setState({
           addError: false
         })
-        await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/friend/request', { friend: { username } }, {
+        axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/friend/request', { friend: { username } }, {
           withCredentials: true,
-        })
+        }).then(result => this.fetchFriends())
         this.closeAddModal()
       } else {
         this.setState({
@@ -196,6 +197,7 @@ class Friends extends Component {
       console.error(err.message)
     }
     this.fetchFriends()
+    this.closeDeleteModal()
   }
 
   async fetchFriends() {
@@ -206,7 +208,7 @@ class Friends extends Component {
   }
 
   async componentDidMount() {
-    this.fetchFriends()
+    await this.fetchFriends()
   }
 
   render() {
