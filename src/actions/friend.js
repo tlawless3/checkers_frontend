@@ -28,7 +28,6 @@ export const fetchAllFriends = () => async (dispatch) => {
       withCredentials: true,
     })
     const response = await (Promise.all([friends, sentRequests, recievedRequests]))
-    console.log(response)
     let data = {
       friends: friends.data,
       sentRequests: sentRequests.data,

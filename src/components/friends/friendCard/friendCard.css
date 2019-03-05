@@ -1,7 +1,8 @@
 .friendCardWrapper {
   width: 150px;
   height: 50px;
-  background-color: purple;
+  padding: 0 10px 0 10px;
+  background-color: #1b56b7;
   position: relative;
   margin: 15px;
 }
@@ -30,4 +31,8 @@
   right: -5px;
   height: 30px;
   width: 30px;
+}
+
+.displayName {
+  font-weight: bold;
 }

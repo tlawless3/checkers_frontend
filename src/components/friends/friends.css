@@ -22,3 +22,8 @@
   background-color: #1b56b7;
   border-radius: 10px;
 }
+
+.cards {
+  display: flex;
+  flex-direction: row;
+}

@@ -10,6 +10,7 @@ import './friends.css'
 import { fetchFriends, fetchRecievedRequests, fetchSentRequests } from '../../actions/friend'
 import FriendCard from './friendCard/friendCard'
 import DeleteFriendModal from './deleteFriendModal/deleteFriendModal'
+import AddFriendModal from './addFriendModal/addFriendModal'
 
 
 class Friends extends Component {
@@ -19,7 +20,8 @@ class Friends extends Component {
     this.state = {
       activeFilter: 'all',
       userData: [],
-      modal: false,
+      deleteModal: false,
+      addModal: false,
       friendIdToDelete: ''
     }
 
@@ -28,8 +30,10 @@ class Friends extends Component {
     this.createDataArr = this.createDataArr.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
-    this.openModal = this.openModal.bind(this)
-    this.closeModal = this.closeModal.bind(this)
+    this.openDeleteModal = this.openDeleteModal.bind(this)
+    this.closeDeleteModal = this.closeDeleteModal.bind(this)
+    this.openAddModal = this.openAddModal.bind(this)
+    this.closeAddModal = this.closeAddModal.bind(this)
   }
 
   isFetching() {
@@ -42,7 +46,6 @@ class Friends extends Component {
 
   async createDataArr() {
     const resultArr = []
-    console.log('hello')
     if (this.state.activeFilter === 'all') {
       this.props.friendReducer.friends.map(friend => {
         resultArr.push(friend)
@@ -107,43 +110,65 @@ class Friends extends Component {
   }
 
   async handleAccept(friendId) {
-    console.log(friendId)
-  }
-
-  openModal(friendId) {
-    this.setState({
-      modal: true,
-      friendIdToDelete: friendId
-    })
-  }
-
-  closeModal() {
-    this.setState({
-      modal: false,
-      friendIdToDelete: ''
-    })
-  }
-
-  async handleDelete() {
     try {
-      await axios.put(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/friend/deny', { friend: { friendId: this.state.friendIdToDelete } }, {
+      const result = await axios.put(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/friend/accept', { friend: { friendId } }, {
         withCredentials: true,
       })
     } catch (err) {
       console.error(err.message)
     }
-
+    this.fetchFriends()
   }
 
-  async componentDidMount() {
+  openDeleteModal(friendId) {
+    this.setState({
+      deleteModal: true,
+      friendIdToDelete: friendId
+    })
+  }
+
+  closeDeleteModal() {
+    this.setState({
+      deleteModal: false,
+      friendIdToDelete: ''
+    })
+  }
+
+  openAddModal() {
+    this.setState({
+      addModal: true
+    })
+  }
+
+  closeAddModal() {
+    this.setState({
+      addModal: false
+    })
+  }
+
+  async handleDelete() {
+    try {
+      const result = await axios.put(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/friend/deny', { friend: { friendId: this.state.friendIdToDelete } }, {
+        withCredentials: true,
+      })
+    } catch (err) {
+      console.error(err.message)
+    }
+    this.fetchFriends()
+  }
+
+  async fetchFriends() {
     await Promise.all([this.props.fetchFriends(),
     this.props.fetchRecievedRequests(),
     this.props.fetchSentRequests()])
     await this.createDataArr()
   }
 
+  async componentDidMount() {
+    this.fetchFriends()
+  }
+
   render() {
-    console.log(this.state)
     //maybe move isFetching into the page itself and have it render a lodaing screen over a template
     if (this.isFetching()) {
       return (<div>
@@ -153,7 +178,8 @@ class Friends extends Component {
       return (
         <div className='friendsPageWrapper'>
           <Navbar />
-          {this.state.modal ? <DeleteFriendModal handleDelete={this.handleDelete} closeModal={this.closeModal} /> : ''}
+          {this.state.deleteModal ? <DeleteFriendModal handleDelete={this.handleDelete} closeDeleteModal={this.closeDeleteModal} /> : ''}
+          {this.state.addModal ? <AddFriendModal closeAddModal={this.closeAddModal} /> : ''}
           <div className='selectors'>
             <div className={(this.state.activeFilter === 'all') ? 'selector activeFilter' : 'selector'} onClick={() => this.handleFilterClick('all')}>
               All
@@ -168,7 +194,9 @@ class Friends extends Component {
               Recieved
             </div>
           </div>
-          {this.state.userData.map(friend => <FriendCard friend={friend} handleAccept={this.handleAccept} openModal={this.openModal} />)}
+          <div className='cards'>
+            {this.state.userData.map(friend => <FriendCard friend={friend} handleAccept={this.handleAccept} openDeleteModal={this.openDeleteModal} />)}
+          </div>
         </div>
       )
     }
