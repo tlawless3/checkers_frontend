@@ -22,7 +22,9 @@ class Friends extends Component {
       userData: [],
       deleteModal: false,
       addModal: false,
-      friendIdToDelete: ''
+      friendIdToDelete: '',
+      firendUsernameToAdd: '',
+      addError: false
     }
 
     this.isFetching = this.isFetching.bind(this)
@@ -34,6 +36,8 @@ class Friends extends Component {
     this.closeDeleteModal = this.closeDeleteModal.bind(this)
     this.openAddModal = this.openAddModal.bind(this)
     this.closeAddModal = this.closeAddModal.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
+    this.handleUsernameChange = this.handleUsernameChange.bind(this)
   }
 
   isFetching() {
@@ -120,6 +124,42 @@ class Friends extends Component {
     this.fetchFriends()
   }
 
+  async handleAdd(event) {
+    event.preventDefault()
+
+    const checkUsernameAvailable = async (username) => {
+      let available = await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/available', { user: { username } }, {
+        withCredentials: true,
+      })
+      return available.data.available
+    }
+    try {
+      const username = this.state.firendUsernameToAdd
+      const exists = ! await checkUsernameAvailable(username)
+      if (exists) {
+        this.setState({
+          addError: false
+        })
+        await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/friend/request', { friend: { username } }, {
+          withCredentials: true,
+        })
+        this.closeAddModal()
+      } else {
+        this.setState({
+          addError: true
+        })
+      }
+    } catch (err) {
+      console.error(err.message)
+    }
+  }
+
+  handleUsernameChange(event) {
+    this.setState({
+      firendUsernameToAdd: event.target.value
+    })
+  }
+
   openDeleteModal(friendId) {
     this.setState({
       deleteModal: true,
@@ -142,7 +182,8 @@ class Friends extends Component {
 
   closeAddModal() {
     this.setState({
-      addModal: false
+      addModal: false,
+      addError: false
     })
   }
 
@@ -179,7 +220,8 @@ class Friends extends Component {
         <div className='friendsPageWrapper'>
           <Navbar />
           {this.state.deleteModal ? <DeleteFriendModal handleDelete={this.handleDelete} closeDeleteModal={this.closeDeleteModal} /> : ''}
-          {this.state.addModal ? <AddFriendModal closeAddModal={this.closeAddModal} /> : ''}
+          {this.state.addModal ? <AddFriendModal addError={this.state.addError} handleUsernameChange={this.handleUsernameChange} closeAddModal={this.closeAddModal} handleAdd={this.handleAdd} /> : ''}
+          <div className='addModalButton' onClick={this.openAddModal}>Add Friend</div>
           <div className='selectors'>
             <div className={(this.state.activeFilter === 'all') ? 'selector activeFilter' : 'selector'} onClick={() => this.handleFilterClick('all')}>
               All

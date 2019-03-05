@@ -24,6 +24,7 @@
 .deleteButton {
   cursor: pointer;
   background-color: grey;
+  font-size: 15px;
   padding: 5px;
   border-radius: 5px;
 }

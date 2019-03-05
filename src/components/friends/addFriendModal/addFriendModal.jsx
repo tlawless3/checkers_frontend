@@ -7,12 +7,12 @@ const addFriendModal = (props) => {
     <div className='addFriendModalWrapper'>
       <div className='addFriendModalBackground' onClick={props.closeAddModal}></div>
       <div className='modal'>
-        <div className='confirmText'>
-          Are you sure you want to delete this friend?
-        </div>
-        <div className='deleteButton' onClick={props.handleAdd}>
-          Delete
-        </div>
+        {props.addError ? (<div className='addError'>Cannot find user</div>) : ''}
+        Enter your friend's username:
+        <form className='addFriendForm'>
+          <input type='text' placeholder='username' onChange={(event) => props.handleUsernameChange(event)} name='username'></input>
+          <button type='submit' onClick={(event) => props.handleAdd(event)}>Add Friend</button>
+        </form>
       </div>
     </div>
   )

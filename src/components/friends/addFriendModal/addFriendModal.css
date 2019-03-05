@@ -17,6 +17,36 @@
   z-index: 999;
 }
 
+.addFriendForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.addFriendForm button {
+  background-color: gray;
+  font-size: 15px;
+  width: 100px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.addFriendForm input {
+  width: 220px;
+  height: 20px;
+}
+
+.addError {
+  position: relative;
+  height: 15px;
+  width: 250px;
+  top: -15px;
+  background-color: #ff9393;
+}
+
 .modal {
   padding: 5px 0 5px 0;
   display: flex;
