@@ -197,7 +197,15 @@ class Board extends Component {
     this.drawPieces()
   }
 
-  checkValidMove() {
+  checkValidMove(x, y) {
+    const availabileTiles = this.state.availabileTiles
+    for (let i = 0; i < availabileTiles.length; i++) {
+      if (availabileTiles[i][0] === y && availabileTiles[i][1] === x) {
+        console.log('hit')
+        return true
+      }
+    }
+    return false
   }
 
   handleClick(event) {
@@ -229,6 +237,9 @@ class Board extends Component {
           ))
       })
     } else if (this.state.selected) {
+      if (this.checkValidMove(column, row)) {
+        console.log('validMove')
+      }
       //check valid move
       //update state accordingly
       this.clearAndRedrawBoard()
