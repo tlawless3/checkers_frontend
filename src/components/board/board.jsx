@@ -11,7 +11,7 @@ class Board extends Component {
     this.state = {
       selected: false,
       selectedSquare: {},
-      availabileTiles: []
+      availabileTiles: [],
     }
 
     this.drawBoard = this.drawBoard.bind(this)
@@ -150,10 +150,10 @@ class Board extends Component {
       if (king) {
         if (y - 1 >= 0 && x + 1 < rows && board[y - 1][x + 1].color === opposingTeam && board[y - 1][x + 1].color === 'empty') {
           availabileTiles.push([y - 1, x + 1])
-        } else if (y - 2 >= 0 && x + 2 < rows && board[y - 1][x - 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
+        } else if (y - 2 >= 0 && x + 2 < rows && board[y - 1][x + 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
           availabileTiles.push([y - 2, x + 2])
         }
-        if (y - 1 >= 0 && x - 1 >= 0 && board[y - 1][x - 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
+        if (y - 1 >= 0 && x - 1 >= 0 && board[y + 1][x + 1].color === 'empty') {
           availabileTiles.push([y - 1, x - 1])
         } else if (y - 2 >= 0 && x - 2 >= 0 && board[y - 1][x - 1].color === opposingTeam && board[y - 2][x - 2].color === 'empty') {
           availabileTiles.push([y - 2, x - 2])
@@ -238,14 +238,22 @@ class Board extends Component {
     } else if (this.state.selected) {
       if (this.checkValidMove(column, row)) {
         let newBoard = board.slice()
-        console.log(newBoard[row][column])
         newBoard[row][column].color = newBoard[this.state.selectedSquare.y][this.state.selectedSquare.x].color
         newBoard[this.state.selectedSquare.y][this.state.selectedSquare.x].color = 'empty'
-        console.log(newBoard[row][column])
+        if (Math.abs(column - this.state.selectedSquare.x) > 1) {
+          console.log('hitting')
+          if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === -2) {
+            newBoard[row + 1][column + 1] = 'empty'
+          } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === 2) {
+            newBoard[row + 1][column - 1] = 'empty'
+          } else if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === -2) {
+            newBoard[row - 1][column + 1] = 'empty'
+          } else if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === 2) {
+            newBoard[row - 1][column - 1] = 'empty'
+          }
+        }
         this.props.updateBoard(newBoard)
       }
-      //check valid move
-      //update state accordingly
       this.clearAndRedrawBoard()
       this.setState({
         selectedSquare: {},

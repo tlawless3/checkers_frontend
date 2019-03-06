@@ -25,7 +25,7 @@ class Home extends Component {
     return activeGameId ? this.props.setActiveGame(activeGameId.activeGame.id) : () => null
   }
 
-  updateBoard(newBoard) {
+  async updateBoard(newBoard) {
     const requestObj = {
       game: {
         gameId: this.props.activeGameReducer.activeGame.id,
@@ -34,7 +34,9 @@ class Home extends Component {
         status: this.props.activeGameReducer.activeGame.status === 'redTurn' ? 'blackTurn' : 'redTurn'
       }
     }
-    this.props.updateAcitveGame(requestObj)
+    await this.props.updateAcitveGame(requestObj)
+    await this.props.fetchUserGames()
+    await this.props.setActiveGame(this.props.activeGameReducer.activeGame.id)
   }
 
   render() {
