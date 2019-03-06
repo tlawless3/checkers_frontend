@@ -239,15 +239,15 @@ class Board extends Component {
         let newBoard = board.slice()
         newBoard[column][row].color = newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color
         newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color = 'empty'
-        if (Math.abs(column - this.state.selectedSquare.y) > 1 && Math.abs(row - this.state.selectedSquare.x) > 1) {
+        if (Math.abs(column - this.state.selectedSquare.x) > 1 && Math.abs(row - this.state.selectedSquare.y) > 1) {
           if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === 2) {
-            newBoard[column + 1][row + 1].color = 'empty'
-          } else if (row - this.state.selectedSquare.y === 2 && column - this.state.selectedSquare.x === -2) {
-            newBoard[column + 1][row - 1].color = 'empty'
-          } else if (row - this.state.selectedSquare.y === -2 && column - this.state.selectedSquare.x === 2) {
-            newBoard[column - 1][row + 1].color = 'empty'
-          } else if (row - this.state.selectedSquare.x === -2 && column - this.state.selectedSquare.y === -2) {
-            newBoard[column - 1][row - 1].color = 'empty'
+            newBoard[this.state.selectedSquare.x + 1][this.state.selectedSquare.y + 1].color = 'empty'
+          } else if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === -2) {
+            newBoard[this.state.selectedSquare.x + 1][this.state.selectedSquare.y - 1].color = 'empty'
+          } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === 2) {
+            newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y + 1].color = 'empty'
+          } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === -2) {
+            newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y - 1].color = 'empty'
           }
         }
         await this.props.updateBoard(newBoard)
