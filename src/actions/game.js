@@ -52,7 +52,6 @@ export const updateAcitveGame = (newGameState) => async (dispatch, getState) => 
     const updatedGame = await axios.put(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/game/update', newGameState, {
       withCredentials: true,
     })
-    console.log(updatedGame)
     const updatedGameArr = currState.gameReducer.games.map(game => {
       if (game.id === updatedGame.id) {
         return updatedGame

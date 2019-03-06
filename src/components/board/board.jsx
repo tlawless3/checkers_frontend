@@ -82,14 +82,14 @@ class Board extends Component {
     for (let i = 0; i < rows; i++) {
       let columnWidth = 0
       for (let j = 0; j < rows; j++) {
-        if (board[i][j].color === "red" || board[i][j].color === "black") {
+        if (board[j][i].color === "red" || board[j][i].color === "black") {
           ctx.beginPath();
           //x, y, radius, starting angle, end angle
           let arcX = (columnWidth + (ratio / 2))
           let arcY = (rowHeight + (ratio / 2))
           ctx.arc(arcX, arcY, radius, 0, 2 * Math.PI)
           //setting fill to red or black
-          ctx.fillStyle = board[i][j].color === 'red' ? '#c93030' : 'black'
+          ctx.fillStyle = board[j][i].color === 'red' ? '#c93030' : 'black'
           ctx.fill()
         }
         columnWidth += (ratio)
@@ -114,8 +114,8 @@ class Board extends Component {
     const ctx = canvas.getContext('2d')
 
     this.state.availabileTiles.map(tile => {
-      const drawY = tile[0] * ratio
-      const drawX = tile[1] * ratio
+      const drawX = tile[0] * ratio
+      const drawY = tile[1] * ratio
       ctx.fillStyle = '#faffe5'
       ctx.fillRect(drawX, drawY, ratio, ratio)
       ctx.stroke()
@@ -128,63 +128,62 @@ class Board extends Component {
     //looking for redTurn blackTurn
     const opposingTeam = this.props.activeGame.status === 'redTurn' ? 'black' : 'red'
     // const opposingTeam = 'black'
+    console.log(board)
 
     const x = this.state.selectedSquare.x
     const y = this.state.selectedSquare.y
-
-    const king = board[y][x].king
-    const availabileTiles = []
-    //check for possible jumps and empty adjacent tiles for red else black
+    console.log('hello')
+    const king = board[x][y].king
+    console.log(board[x][y])
+    let availabileTiles = []
     if (opposingTeam === 'black') {
-      if (y + 1 < rows && x + 1 < rows && board[y + 1][x + 1].color === 'empty') {
-        availabileTiles.push([y + 1, x + 1])
-      } else if (y + 2 < rows && x + 2 < rows && board[y + 1][x + 1].color === opposingTeam && board[y + 2][x + 2].color === 'empty') {
-        availabileTiles.push([y + 2, x + 2])
+      if (y + 1 < rows && x + 1 < rows && board[x + 1][y + 1].color === 'empty') {
+        availabileTiles.push([x + 1, y + 1])
+      } else if (y + 2 < rows && x + 2 < rows && board[x + 1][y + 1].color === opposingTeam && board[x + 2][y + 2].color === 'empty') {
+        availabileTiles.push([x + 2, y + 2])
       }
-      if (y + 1 < rows && x - 1 >= 0 && board[y + 1][x - 1].color === 'empty') {
-        availabileTiles.push([y + 1, x - 1])
-      } else if (y + 2 < rows && x - 2 >= 0 && board[y + 1][x - 1].color === opposingTeam && board[y + 2][x - 2].color === 'empty') {
-        availabileTiles.push([y + 2, x - 2])
+      if (y + 1 < rows && x - 1 >= 0 && board[x - 1][y + 1].color === 'empty') {
+        availabileTiles.push([x - 1, y + 1])
+      } else if (y + 2 < rows && x - 2 >= 0 && board[x - 1][y + 1].color === opposingTeam && board[x - 2][y + 2].color === 'empty') {
+        availabileTiles.push([x - 2, y + 2])
       }
-      //moves king can make
       if (king) {
-        if (y - 1 >= 0 && x + 1 < rows && board[y - 1][x + 1].color === opposingTeam && board[y - 1][x + 1].color === 'empty') {
-          availabileTiles.push([y - 1, x + 1])
-        } else if (y - 2 >= 0 && x + 2 < rows && board[y - 1][x + 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
-          availabileTiles.push([y - 2, x + 2])
+        if (y - 1 >= 0 && x + 1 < rows && board[x + 1][y - 1].color === 'empty') {
+          availabileTiles.push([x + 1, y - 1])
+        } else if (y - 2 >= 0 && x + 2 < rows && board[x + 1][y - 1].color === opposingTeam && board[x + 2][y - 2].color === 'empty') {
+          availabileTiles.push([x + 2, y - 2])
         }
-        if (y - 1 >= 0 && x - 1 >= 0 && board[y + 1][x + 1].color === 'empty') {
-          availabileTiles.push([y - 1, x - 1])
-        } else if (y - 2 >= 0 && x - 2 >= 0 && board[y - 1][x - 1].color === opposingTeam && board[y - 2][x - 2].color === 'empty') {
-          availabileTiles.push([y - 2, x - 2])
+        if (y - 1 >= 0 && x - 1 >= 0 && board[x - 1][y - 1].color === 'empty') {
+          availabileTiles.push([x - 1, y - 1])
+        } else if (y - 2 >= 0 && x - 2 >= 0 && board[x - 1][y - 1].color === opposingTeam && board[x - 2][y - 2].color === 'empty') {
+          availabileTiles.push([x - 2, y - 2])
+        }
+      }
+    } else {
+      if (y - 1 >= 0 && x + 1 < rows && board[x + 1][y - 1].color === 'empty') {
+        availabileTiles.push([x + 1, y - 1])
+      } else if (y - 2 >= 0 && x + 2 < rows && board[x + 1][y - 1].color === opposingTeam && board[x + 2][y - 2].color === 'empty') {
+        availabileTiles.push([x + 2, y - 2])
+      }
+      if (y - 1 >= 0 && x - 1 >= 0 && board[x - 1][y - 1].color === 'empty') {
+        availabileTiles.push([x - 1, y - 1])
+      } else if (y - 2 >= 0 && x - 2 >= 0 && board[x - 1][y - 1].color === opposingTeam && board[x - 2][y - 2].color === 'empty') {
+        availabileTiles.push([x - 2, y - 2])
+      }
+      if (king) {
+        if (y + 1 < rows && x + 1 < rows && board[x + 1][y + 1].color === 'empty') {
+          availabileTiles.push([x + 1, y + 1])
+        } else if (y + 2 < rows && x + 2 < rows && board[x + 1][y + 1].color === opposingTeam && board[x + 2][y + 2].color === 'empty') {
+          availabileTiles.push([x + 2, y + 2])
+        }
+        if (y + 1 < rows && x - 1 >= 0 && board[x - 1][y + 1].color === 'empty') {
+          availabileTiles.push([x - 1, y + 1])
+        } else if (y + 2 < rows && x - 2 >= 0 && board[x - 1][y + 1].color === opposingTeam && board[x - 2][y + 2].color === 'empty') {
+          availabileTiles.push([x - 2, y + 2])
         }
       }
     }
-    //moves for black
-    else {
-      if (y - 1 >= 0 && x + 1 < rows && board[y - 1][x + 1].color === 'empty') {
-        availabileTiles.push([y - 1, x + 1])
-      } else if (y - 2 >= 0 && x + 2 < rows && board[y - 1][x + 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
-        availabileTiles.push([y - 2, x + 2])
-      }
-      if (y - 1 >= 0 && x - 1 >= 0 && board[y - 1][x - 1].color === 'empty') {
-        availabileTiles.push([y - 1, x - 1])
-      } else if (y - 2 >= 0 && x - 2 >= 0 && board[y - 1][x - 1].color === opposingTeam && board[y - 2][x - 2].color === 'empty') {
-        availabileTiles.push([y - 2, x - 2])
-      }
-      if (king) {
-        if (y + 1 < rows && x + 1 < rows && board[y + 1][x + 1].color === 'empty') {
-          availabileTiles.push([y + 1, x + 1])
-        } else if (y + 2 < rows && x + 2 < rows && board[y + 1][x + 1].color === opposingTeam && board[y + 2][x + 2].color === 'empty') {
-          availabileTiles.push([y + 2, x + 2])
-        }
-        if (y + 1 < rows && x - 1 >= 0 && board[y + 1][x - 1].color === 'empty') {
-          availabileTiles.push([y + 1, x - 1])
-        } else if (y + 2 < rows && x - 2 >= 0 && board[y + 1][x - 1].color === opposingTeam && board[y + 2][x - 2].color === 'empty') {
-          availabileTiles.push([y + 2, x - 2])
-        }
-      }
-    }
+    console.log(availabileTiles)
     return availabileTiles
   }
 
@@ -200,14 +199,14 @@ class Board extends Component {
   checkValidMove(x, y) {
     const availabileTiles = this.state.availabileTiles
     for (let i = 0; i < availabileTiles.length; i++) {
-      if (availabileTiles[i][0] === y && availabileTiles[i][1] === x) {
+      if (availabileTiles[i][0] === x && availabileTiles[i][1] === y) {
         return true
       }
     }
     return false
   }
 
-  handleClick(event) {
+  async handleClick(event) {
     const board = this.props.board
     const resolution = this.props.resolution
     const rows = board.length
@@ -219,9 +218,9 @@ class Board extends Component {
     const y = event.clientY - rect.top;
     const column = (Math.floor(x / ratio))
     const row = (Math.floor(y / ratio))
-    const square = board[row][column]
+    const square = board[column][row]
     // top condition is turn protection enabled
-    if (!this.state.selected && (this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black')) {
+    if (!this.state.selected && ((this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black'))) {
       // if (!this.state.selected) {
       this.setState({
         selectedSquare: { x: column, y: row },
@@ -238,21 +237,20 @@ class Board extends Component {
     } else if (this.state.selected) {
       if (this.checkValidMove(column, row)) {
         let newBoard = board.slice()
-        newBoard[row][column].color = newBoard[this.state.selectedSquare.y][this.state.selectedSquare.x].color
-        newBoard[this.state.selectedSquare.y][this.state.selectedSquare.x].color = 'empty'
-        if (Math.abs(column - this.state.selectedSquare.x) > 1) {
-          console.log('hitting')
-          if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === -2) {
-            newBoard[row + 1][column + 1] = 'empty'
-          } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === 2) {
-            newBoard[row + 1][column - 1] = 'empty'
-          } else if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === -2) {
-            newBoard[row - 1][column + 1] = 'empty'
-          } else if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === 2) {
-            newBoard[row - 1][column - 1] = 'empty'
+        newBoard[column][row].color = newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color
+        newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color = 'empty'
+        if (Math.abs(column - this.state.selectedSquare.y) > 1 && Math.abs(row - this.state.selectedSquare.x) > 1) {
+          if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === 2) {
+            newBoard[column + 1][row + 1].color = 'empty'
+          } else if (row - this.state.selectedSquare.y === 2 && column - this.state.selectedSquare.x === -2) {
+            newBoard[column + 1][row - 1].color = 'empty'
+          } else if (row - this.state.selectedSquare.y === -2 && column - this.state.selectedSquare.x === 2) {
+            newBoard[column - 1][row + 1].color = 'empty'
+          } else if (row - this.state.selectedSquare.x === -2 && column - this.state.selectedSquare.y === -2) {
+            newBoard[column - 1][row - 1].color = 'empty'
           }
         }
-        this.props.updateBoard(newBoard)
+        await this.props.updateBoard(newBoard)
       }
       this.clearAndRedrawBoard()
       this.setState({
