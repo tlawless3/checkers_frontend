@@ -44,6 +44,11 @@ class Navbar extends Component {
           </NavLink>
         </div>
         <div className='right'>
+          <NavLink to='/profile' className='link'>
+            <div className='friends button'>
+              Profile
+            </div>
+          </NavLink>
           <div className='logout button' onClick={this.handleLogout}>
             Logout
           </div>

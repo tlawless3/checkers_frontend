@@ -22,3 +22,7 @@ export {
   default as Friends
 }
 from './friends/friends'
+export {
+  default as Profile
+}
+from './profile/profile'
