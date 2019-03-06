@@ -110,7 +110,7 @@ class Board extends Component {
     const ratio = (resolution / rows)
     //looking for redTurn blackTurn
     // const opposingTeam = this.props.activeGame.status === 'redTurn' ? 'black' : 'red'
-    const opposingTeam = 'black'
+    const opposingTeam = 'red'
 
     const canvas = ReactDOM.findDOMNode(this.refs.boardCanvas)
     const ctx = canvas.getContext('2d')
@@ -121,52 +121,52 @@ class Board extends Component {
     const availabileTiles = []
     //check for possible jumps and empty adjacent tiles for red else black
     if (opposingTeam === 'black') {
-      console.log(board[y + 1][x + 1].color)
-      if (board[y + 1][x + 1].color === 'empty') {
+      if (y + 1 < rows && x + 1 < rows && board[y + 1][x + 1].color === 'empty') {
         availabileTiles.push([y + 1, x + 1])
-      } else if (board[y + 1][x + 1].color === opposingTeam && board[y + 2][x + 2].color === 'empty') {
+      } else if (y + 2 < rows && x + 2 < rows && board[y + 1][x + 1].color === opposingTeam && board[y + 2][x + 2].color === 'empty') {
         availabileTiles.push([y + 2, x + 2])
       }
-      if (board[y + 1][x - 1].color === 'empty') {
+      if (y + 1 < rows && x - 1 >= 0 && board[y + 1][x - 1].color === 'empty') {
         availabileTiles.push([y + 1, x - 1])
-      } else if (board[y + 1][x - 1].color === opposingTeam && board[y + 2][x - 2].color === 'empty') {
+      } else if (y + 2 < rows && x - 2 >= 0 && board[y + 1][x - 1].color === opposingTeam && board[y + 2][x - 2].color === 'empty') {
         availabileTiles.push([y + 2, x - 2])
       }
       //moves king can make
       if (king) {
-        if (board[y - 1][x + 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
+        if (y - 1 >= 0 && x + 1 < rows && board[y - 1][x + 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
           availabileTiles.push([y - 1, x + 1])
-        } else if (board[y - 1][x - 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
+        } else if (y - 2 >= 0 && x + 2 < rows && board[y - 1][x - 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
           availabileTiles.push([y - 2, x + 2])
         }
-        if (board[y - 1][x - 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
+        if (y - 1 >= 0 && x - 1 >= 0 && board[y - 1][x - 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
           availabileTiles.push([y - 1, x - 1])
-        } else if (board[y - 1][x - 1].color === opposingTeam && board[y - 2][x - 2].color === 'empty') {
+        } else if (y - 2 >= 0 && x - 2 >= 0 && board[y - 1][x - 1].color === opposingTeam && board[y - 2][x - 2].color === 'empty') {
           availabileTiles.push([y - 2, x - 2])
         }
       }
     }
     //moves for black
     else {
-      if (board[y - 1][x + 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
+      console.log('hello')
+      if (y - 1 >= 0 && x + 1 < rows && board[y - 1][x + 1].color === 'empty') {
         availabileTiles.push([y - 1, x + 1])
-      } else if (board[y - 1][x - 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
+      } else if (y - 2 >= 0 && x + 2 < rows && board[y - 1][x + 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
         availabileTiles.push([y - 2, x + 2])
       }
-      if (board[y - 1][x - 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
+      if (y - 1 >= 0 && x - 1 >= 0 && board[y - 1][x - 1].color === 'empty') {
         availabileTiles.push([y - 1, x - 1])
-      } else if (board[y - 1][x - 1].color === opposingTeam && board[y - 2][x - 2].color === 'empty') {
+      } else if (y - 2 >= 0 && x - 2 >= 0 && board[y - 1][x - 1].color === opposingTeam && board[y - 2][x - 2].color === 'empty') {
         availabileTiles.push([y - 2, x - 2])
       }
       if (king) {
-        if (board[y + 1][x + 1].color === 'empty') {
+        if (y + 1 < rows && x + 1 < rows && board[y + 1][x + 1].color === 'empty') {
           availabileTiles.push([y + 1, x + 1])
-        } else if (board[y + 1][x + 1].color === opposingTeam && board[y + 2][x + 2].color === 'empty') {
+        } else if (y + 2 < rows && x + 2 < rows && board[y + 1][x + 1].color === opposingTeam && board[y + 2][x + 2].color === 'empty') {
           availabileTiles.push([y + 2, x + 2])
         }
-        if (board[y + 1][x - 1].color === 'empty') {
+        if (y + 1 < rows && x - 1 >= 0 && board[y + 1][x - 1].color === 'empty') {
           availabileTiles.push([y + 1, x - 1])
-        } else if (board[y + 1][x - 1].color === opposingTeam && board[y + 2][x - 2].color === 'empty') {
+        } else if (y + 2 < rows && x - 2 >= 0 && board[y + 1][x - 1].color === opposingTeam && board[y + 2][x - 2].color === 'empty') {
           availabileTiles.push([y + 2, x - 2])
         }
       }
