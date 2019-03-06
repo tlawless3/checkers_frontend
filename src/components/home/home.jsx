@@ -29,7 +29,7 @@ class Home extends Component {
       <div className='homePageWrapper'>
         <Navbar />
         <div className='activeBoardWrapper'>
-          {this.props.activeGameReducer.activeGame ? <Board className='activeBoard' board={this.props.activeGameReducer.activeGame.board} resolution={640} active={true} /> : ''}
+          {this.props.activeGameReducer.activeGame ? <Board className='activeBoard' board={this.props.activeGameReducer.activeGame.board} activeGame={this.props.activeGameReducer.activeGame} resolution={640} active={true} /> : ''}
         </div>
         {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} user={this.props.userReducer.user} games={this.props.gameReducer.games} /> : ''}
       </div>

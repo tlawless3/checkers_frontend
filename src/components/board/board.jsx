@@ -101,8 +101,12 @@ class Board extends Component {
     this.drawPieces()
   }
 
-  checkValidMove() {
+  drawHighlights() {
+    const canvas = ReactDOM.findDOMNode(this.refs.boardCanvas)
+    const ctx = canvas.getContext('2d')
+  }
 
+  checkValidMove() {
   }
 
   handleClick(event) {
@@ -118,10 +122,12 @@ class Board extends Component {
     const column = (Math.floor(x / ratio))
     const row = (Math.floor(y / ratio))
     const square = board[row][column]
-    if (!this.state.selected) {
+    if (!this.state.selected && (this.props.activeGame.status === 'redTurn' && square === 'red') || (this.props.activeGame.status === 'blackTurn' && square === 'black')) {
       this.setState({
         selectedSquare: { x: column, y: row },
         selected: true
+      }, () => {
+
       })
     } else if (this.state.selected) {
       //check valid move
