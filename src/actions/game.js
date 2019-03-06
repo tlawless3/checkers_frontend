@@ -5,6 +5,11 @@ export const requestGames = payload => ({
   payload
 })
 
+export const requestActiveGame = payload => ({
+  type: 'REQUEST_ACTIVE_GAME',
+  payload
+})
+
 export const fetchUserGames = () => async (dispatch) => {
   dispatch(requestGames)
   try {
@@ -37,5 +42,30 @@ const shouldGetGame = (state) => {
     return false
   } else {
     return false
+  }
+}
+
+export const updateAcitveGame = (newGameState) => async (dispatch, getState) => {
+  dispatch(requestActiveGame)
+  const currState = await getState()
+  try {
+    const updatedGame = await axios.put(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/game/update', newGameState, {
+      withCredentials: true,
+    })
+    console.log(updatedGame)
+    const updatedGameArr = currState.gameReducer.games.map(game => {
+      if (game.id === updatedGame.id) {
+        return updatedGame
+      }
+      return game
+    })
+    dispatch({
+      type: 'RECIEVE_ACTIVE_GAME',
+      payload: updatedGameArr
+    })
+  } catch (err) {
+    dispatch({
+      type: 'RECIEVE_ACTIVE_GAME'
+    })
   }
 }

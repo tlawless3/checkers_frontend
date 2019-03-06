@@ -5,6 +5,17 @@ export default (state = {}, action) => {
         ...state,
         isFetching: true
       }
+    case 'REQUEST_ACTIVE_GAME':
+      return {
+        ...state,
+        isFetchingActiveGame: true
+      }
+    case 'RECIEVE_ACTIVE_GAME':
+      return {
+        ...state,
+        games: action.payload,
+        isFetchingActiveGame: false
+      }
     case 'RECIEVE_GAMES':
       return {
         ...state,

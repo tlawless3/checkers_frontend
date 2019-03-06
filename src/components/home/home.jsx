@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import './home.css'
 import { Board, Navbar } from '../index'
 import Sidebar from './sidebar/sidebar'
-import { fetchGamesConditionally } from '../../actions/game'
+import { fetchGamesConditionally, updateAcitveGame, fetchUserGames } from '../../actions/game'
 import { setActiveGame } from '../../actions/activeGame'
 import { loadState } from '../../localstorage'
 
@@ -15,6 +15,8 @@ class Home extends Component {
     this.state = {
       error: false,
     }
+
+    this.updateBoard = this.updateBoard.bind(this)
   }
 
   async componentDidMount() {
@@ -23,13 +25,24 @@ class Home extends Component {
     return activeGameId ? this.props.setActiveGame(activeGameId.activeGame.id) : () => null
   }
 
+  updateBoard(newBoard) {
+    const requestObj = {
+      game: {
+        gameId: this.props.activeGameReducer.activeGame.id,
+        board: newBoard,
+        playerColors: this.props.activeGameReducer.activeGame.playerColors,
+        status: this.props.activeGameReducer.activeGame.status === 'redTurn' ? 'blackTurn' : 'redTurn'
+      }
+    }
+    this.props.updateAcitveGame(requestObj)
+  }
 
   render() {
     return (
       <div className='homePageWrapper'>
         <Navbar />
         <div className='activeBoardWrapper'>
-          {this.props.activeGameReducer.activeGame ? <Board className='activeBoard' board={this.props.activeGameReducer.activeGame.board} activeGame={this.props.activeGameReducer.activeGame} resolution={640} active={true} /> : ''}
+          {this.props.activeGameReducer.activeGame ? <Board className='activeBoard' updateBoard={this.updateBoard} board={this.props.activeGameReducer.activeGame.board} activeGame={this.props.activeGameReducer.activeGame} resolution={640} active={true} /> : ''}
         </div>
         {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} user={this.props.userReducer.user} games={this.props.gameReducer.games} /> : ''}
       </div>
@@ -42,8 +55,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  fetchUserGames: () => dispatch(fetchUserGames()),
   fetchGamesConditionally: () => dispatch(fetchGamesConditionally()),
-  setActiveGame: (gameId) => dispatch(setActiveGame(gameId))
+  setActiveGame: (gameId) => dispatch(setActiveGame(gameId)),
+  updateAcitveGame: (newGameState) => dispatch(updateAcitveGame(newGameState))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

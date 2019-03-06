@@ -126,8 +126,8 @@ class Board extends Component {
     const board = this.props.board
     const rows = board.length
     //looking for redTurn blackTurn
-    // const opposingTeam = this.props.activeGame.status === 'redTurn' ? 'black' : 'red'
-    const opposingTeam = 'black'
+    const opposingTeam = this.props.activeGame.status === 'redTurn' ? 'black' : 'red'
+    // const opposingTeam = 'black'
 
     const x = this.state.selectedSquare.x
     const y = this.state.selectedSquare.y
@@ -201,7 +201,6 @@ class Board extends Component {
     const availabileTiles = this.state.availabileTiles
     for (let i = 0; i < availabileTiles.length; i++) {
       if (availabileTiles[i][0] === y && availabileTiles[i][1] === x) {
-        console.log('hit')
         return true
       }
     }
@@ -222,8 +221,8 @@ class Board extends Component {
     const row = (Math.floor(y / ratio))
     const square = board[row][column]
     // top condition is turn protection enabled
-    // if (!this.state.selected && (this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black')) {
-    if (!this.state.selected) {
+    if (!this.state.selected && (this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black')) {
+      // if (!this.state.selected) {
       this.setState({
         selectedSquare: { x: column, y: row },
         selected: true
@@ -238,7 +237,12 @@ class Board extends Component {
       })
     } else if (this.state.selected) {
       if (this.checkValidMove(column, row)) {
-        console.log('validMove')
+        let newBoard = board.slice()
+        console.log(newBoard[row][column])
+        newBoard[row][column].color = newBoard[this.state.selectedSquare.y][this.state.selectedSquare.x].color
+        newBoard[this.state.selectedSquare.y][this.state.selectedSquare.x].color = 'empty'
+        console.log(newBoard[row][column])
+        this.props.updateBoard(newBoard)
       }
       //check valid move
       //update state accordingly
