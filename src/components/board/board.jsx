@@ -16,6 +16,7 @@ class Board extends Component {
     this.drawBoard = this.drawBoard.bind(this)
     this.drawPieces = this.drawPieces.bind(this)
     this.handleClick = this.handleClick.bind(this)
+    this.drawHighlights = this.drawHighlights.bind(this)
   }
 
   drawBoard() {
@@ -102,8 +103,92 @@ class Board extends Component {
   }
 
   drawHighlights() {
+    console.log(this.props.board)
+    const board = this.props.board
+    const resolution = this.props.resolution
+    const rows = board.length
+    const ratio = (resolution / rows)
+    //looking for redTurn blackTurn
+    // const opposingTeam = this.props.activeGame.status === 'redTurn' ? 'black' : 'red'
+    const opposingTeam = 'black'
+
     const canvas = ReactDOM.findDOMNode(this.refs.boardCanvas)
     const ctx = canvas.getContext('2d')
+    const x = this.state.selectedSquare.x
+    const y = this.state.selectedSquare.y
+
+    const king = board[y][x].king
+    const availabileTiles = []
+    //check for possible jumps and empty adjacent tiles for red else black
+    if (opposingTeam === 'black') {
+      console.log(board[y + 1][x + 1].color)
+      if (board[y + 1][x + 1].color === 'empty') {
+        availabileTiles.push([y + 1, x + 1])
+      } else if (board[y + 1][x + 1].color === opposingTeam && board[y + 2][x + 2].color === 'empty') {
+        availabileTiles.push([y + 2, x + 2])
+      }
+      if (board[y + 1][x - 1].color === 'empty') {
+        availabileTiles.push([y + 1, x - 1])
+      } else if (board[y + 1][x - 1].color === opposingTeam && board[y + 2][x - 2].color === 'empty') {
+        availabileTiles.push([y + 2, x - 2])
+      }
+      //moves king can make
+      if (king) {
+        if (board[y - 1][x + 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
+          availabileTiles.push([y - 1, x + 1])
+        } else if (board[y - 1][x - 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
+          availabileTiles.push([y - 2, x + 2])
+        }
+        if (board[y - 1][x - 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
+          availabileTiles.push([y - 1, x - 1])
+        } else if (board[y - 1][x - 1].color === opposingTeam && board[y - 2][x - 2].color === 'empty') {
+          availabileTiles.push([y - 2, x - 2])
+        }
+      }
+    }
+    //moves for black
+    else {
+      if (board[y - 1][x + 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
+        availabileTiles.push([y - 1, x + 1])
+      } else if (board[y - 1][x - 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
+        availabileTiles.push([y - 2, x + 2])
+      }
+      if (board[y - 1][x - 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
+        availabileTiles.push([y - 1, x - 1])
+      } else if (board[y - 1][x - 1].color === opposingTeam && board[y - 2][x - 2].color === 'empty') {
+        availabileTiles.push([y - 2, x - 2])
+      }
+      if (king) {
+        if (board[y + 1][x + 1].color === 'empty') {
+          availabileTiles.push([y + 1, x + 1])
+        } else if (board[y + 1][x + 1].color === opposingTeam && board[y + 2][x + 2].color === 'empty') {
+          availabileTiles.push([y + 2, x + 2])
+        }
+        if (board[y + 1][x - 1].color === 'empty') {
+          availabileTiles.push([y + 1, x - 1])
+        } else if (board[y + 1][x - 1].color === opposingTeam && board[y + 2][x - 2].color === 'empty') {
+          availabileTiles.push([y + 2, x - 2])
+        }
+      }
+    }
+
+    console.log(availabileTiles)
+    availabileTiles.map(tile => {
+      const drawY = tile[0] * ratio
+      const drawX = tile[1] * ratio
+      ctx.fillStyle = '#faffe5'
+      ctx.fillRect(drawX, drawY, ratio, ratio)
+      ctx.stroke()
+    })
+  }
+
+  clearAndRedrawBoard() {
+    const canvas = ReactDOM.findDOMNode(this.refs.boardCanvas)
+    const ctx = canvas.getContext('2d')
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    this.drawBoard()
+    this.drawPieces()
   }
 
   checkValidMove() {
@@ -122,13 +207,15 @@ class Board extends Component {
     const column = (Math.floor(x / ratio))
     const row = (Math.floor(y / ratio))
     const square = board[row][column]
-    if (!this.state.selected && (this.props.activeGame.status === 'redTurn' && square === 'red') || (this.props.activeGame.status === 'blackTurn' && square === 'black')) {
+    // top condition is turn protection enabled
+    // if (!this.state.selected && (this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black')) {
+    if (!this.state.selected) {
       this.setState({
         selectedSquare: { x: column, y: row },
         selected: true
-      }, () => {
-
-      })
+      }, () =>
+          this.drawHighlights()
+      )
     } else if (this.state.selected) {
       //check valid move
       //update state accordingly
