@@ -10,13 +10,15 @@ class Board extends Component {
     super(props)
     this.state = {
       selected: false,
-      selectedSquare: {}
+      selectedSquare: {},
+      availabileTiles: []
     }
 
     this.drawBoard = this.drawBoard.bind(this)
     this.drawPieces = this.drawPieces.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.drawHighlights = this.drawHighlights.bind(this)
+    this.generatePossibleMoves = this.generatePossibleMoves.bind(this)
   }
 
   drawBoard() {
@@ -103,17 +105,30 @@ class Board extends Component {
   }
 
   drawHighlights() {
-    console.log(this.props.board)
     const board = this.props.board
     const resolution = this.props.resolution
     const rows = board.length
     const ratio = (resolution / rows)
-    //looking for redTurn blackTurn
-    // const opposingTeam = this.props.activeGame.status === 'redTurn' ? 'black' : 'red'
-    const opposingTeam = 'red'
 
     const canvas = ReactDOM.findDOMNode(this.refs.boardCanvas)
     const ctx = canvas.getContext('2d')
+
+    this.state.availabileTiles.map(tile => {
+      const drawY = tile[0] * ratio
+      const drawX = tile[1] * ratio
+      ctx.fillStyle = '#faffe5'
+      ctx.fillRect(drawX, drawY, ratio, ratio)
+      ctx.stroke()
+    })
+  }
+
+  generatePossibleMoves() {
+    const board = this.props.board
+    const rows = board.length
+    //looking for redTurn blackTurn
+    // const opposingTeam = this.props.activeGame.status === 'redTurn' ? 'black' : 'red'
+    const opposingTeam = 'black'
+
     const x = this.state.selectedSquare.x
     const y = this.state.selectedSquare.y
 
@@ -133,7 +148,7 @@ class Board extends Component {
       }
       //moves king can make
       if (king) {
-        if (y - 1 >= 0 && x + 1 < rows && board[y - 1][x + 1].color === opposingTeam && board[y + 1][x + 1].color === 'empty') {
+        if (y - 1 >= 0 && x + 1 < rows && board[y - 1][x + 1].color === opposingTeam && board[y - 1][x + 1].color === 'empty') {
           availabileTiles.push([y - 1, x + 1])
         } else if (y - 2 >= 0 && x + 2 < rows && board[y - 1][x - 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
           availabileTiles.push([y - 2, x + 2])
@@ -147,7 +162,6 @@ class Board extends Component {
     }
     //moves for black
     else {
-      console.log('hello')
       if (y - 1 >= 0 && x + 1 < rows && board[y - 1][x + 1].color === 'empty') {
         availabileTiles.push([y - 1, x + 1])
       } else if (y - 2 >= 0 && x + 2 < rows && board[y - 1][x + 1].color === opposingTeam && board[y - 2][x + 2].color === 'empty') {
@@ -171,15 +185,7 @@ class Board extends Component {
         }
       }
     }
-
-    console.log(availabileTiles)
-    availabileTiles.map(tile => {
-      const drawY = tile[0] * ratio
-      const drawX = tile[1] * ratio
-      ctx.fillStyle = '#faffe5'
-      ctx.fillRect(drawX, drawY, ratio, ratio)
-      ctx.stroke()
-    })
+    return availabileTiles
   }
 
   clearAndRedrawBoard() {
@@ -213,12 +219,19 @@ class Board extends Component {
       this.setState({
         selectedSquare: { x: column, y: row },
         selected: true
-      }, () =>
-          this.drawHighlights()
-      )
+      }, () => {
+        return (
+          this.setState({
+            availabileTiles: this.generatePossibleMoves()
+          }, () => (
+            this.drawHighlights()
+          )
+          ))
+      })
     } else if (this.state.selected) {
       //check valid move
       //update state accordingly
+      this.clearAndRedrawBoard()
       this.setState({
         selectedSquare: {},
         selected: false
