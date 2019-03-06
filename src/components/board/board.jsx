@@ -79,14 +79,14 @@ class Board extends Component {
     for (let i = 0; i < rows; i++) {
       let columnWidth = 0
       for (let j = 0; j < rows; j++) {
-        if (board[i][j] === "red" || board[i][j] === "black") {
+        if (board[i][j].color === "red" || board[i][j].color === "black") {
           ctx.beginPath();
           //x, y, radius, starting angle, end angle
           let arcX = (columnWidth + (ratio / 2))
           let arcY = (rowHeight + (ratio / 2))
           ctx.arc(arcX, arcY, radius, 0, 2 * Math.PI)
           //setting fill to red or black
-          ctx.fillStyle = board[i][j] === 'red' ? '#c93030' : 'black'
+          ctx.fillStyle = board[i][j].color === 'red' ? '#c93030' : 'black'
           ctx.fill()
         }
         columnWidth += (ratio)
