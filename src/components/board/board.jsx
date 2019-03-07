@@ -238,6 +238,7 @@ class Board extends Component {
 
   checkValidSelection(x, y) {
     if (this.state.piecesWithJumps.length > 0) {
+      console.log(this.state.piecesWithJumps)
       for (let i = 0; i < this.state.piecesWithJumps.length; i++) {
         if (this.state.piecesWithJumps[i][0] === x && this.state.piecesWithJumps[i][1] === y) {
           return true
@@ -286,7 +287,7 @@ class Board extends Component {
         }, () => {
           return (
             this.setState({
-              availabileTiles: this.generatePossibleMoves(false)
+              availabileTiles: this.generatePossibleMoves(false, column, row)
             }, () => (
               this.drawHighlights()
             )
@@ -319,7 +320,8 @@ class Board extends Component {
         this.clearAndRedrawBoard()
         this.setState({
           selectedSquare: {},
-          selected: false
+          selected: false,
+          piecesWithJumps: []
         })
       }
     }
@@ -329,7 +331,7 @@ class Board extends Component {
     else {
       if (!this.state.selected && ((this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black')) && this.checkValidSelection(column, row)) {
         this.setState({
-          possibleJumps: jumps,
+          piecesWithJumps: jumps,
           selectedSquare: { x: column, y: row },
           selected: true
         }, () => {
@@ -371,7 +373,8 @@ class Board extends Component {
         this.clearAndRedrawBoard()
         this.setState({
           selectedSquare: {},
-          selected: false
+          selected: false,
+          piecesWithJumps: []
         })
       }
     }
