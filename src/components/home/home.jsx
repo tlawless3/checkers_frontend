@@ -56,7 +56,7 @@ class Home extends Component {
         <div className='activeBoardWrapper'>
           {this.props.activeGameReducer.activeGame ? <Board className='activeBoard' updateBoard={this.updateBoard} board={this.props.activeGameReducer.activeGame.board} activeGame={this.props.activeGameReducer.activeGame} resolution={640} active={true} /> : ''}
         </div>
-        {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} user={this.props.userReducer.user} games={this.props.gameReducer.games} /> : ''}
+        {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} activeGameId={this.props.activeGameReducer.activeGame ? this.props.activeGameReducer.activeGame.id : null} user={this.props.userReducer.user} games={this.props.gameReducer.games} /> : ''}
       </div>
     )
   }

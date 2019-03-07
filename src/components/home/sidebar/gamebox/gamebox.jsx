@@ -4,7 +4,7 @@ import { Board } from '../../../index'
 
 const Gamebox = (props) => {
   return (
-    <div className='boxWrapper' key={props.game.id} onClick={() => props.setActiveGame(props.game.id)}>
+    <div className={props.activeBoard ? 'boxWrapper activeBoard' : 'boxWrapper'} key={props.game.id} onClick={() => props.setActiveGame(props.game.id)}>
       <div className='boardWrapper'>
         <Board board={props.game.board} active={false} resolution={80} />
       </div>

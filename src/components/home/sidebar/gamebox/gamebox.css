@@ -18,3 +18,7 @@
 .boardWrapper {
   margin-left: 5px;
 }
+
+.activeBoard {
+  background-color: #ebed9a;
+}
