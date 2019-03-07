@@ -100,8 +100,11 @@ class Board extends Component {
   }
 
   componentDidMount() {
-    this.drawBoard()
-    this.drawPieces()
+    this.clearAndRedrawBoard()
+  }
+
+  componentDidUpdate() {
+    this.clearAndRedrawBoard()
   }
 
   drawHighlights() {
@@ -113,7 +116,7 @@ class Board extends Component {
     const canvas = ReactDOM.findDOMNode(this.refs.boardCanvas)
     const ctx = canvas.getContext('2d')
 
-    this.state.availabileTiles.map(tile => {
+    this.state.availabileTiles.forEach(tile => {
       const drawX = tile[0] * ratio
       const drawY = tile[1] * ratio
       ctx.fillStyle = '#faffe5'
@@ -128,13 +131,9 @@ class Board extends Component {
     //looking for redTurn blackTurn
     const opposingTeam = this.props.activeGame.status === 'redTurn' ? 'black' : 'red'
     // const opposingTeam = 'black'
-    console.log(board)
-
     const x = this.state.selectedSquare.x
     const y = this.state.selectedSquare.y
-    console.log('hello')
     const king = board[x][y].king
-    console.log(board[x][y])
     let availabileTiles = []
     if (opposingTeam === 'black') {
       if (y + 1 < rows && x + 1 < rows && board[x + 1][y + 1].color === 'empty') {
@@ -183,7 +182,6 @@ class Board extends Component {
         }
       }
     }
-    console.log(availabileTiles)
     return availabileTiles
   }
 
@@ -269,11 +267,6 @@ class Board extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ...state
-})
 
-const mapDispatchToProps = dispatch => ({
-})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Board);
+export default (Board);

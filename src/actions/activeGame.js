@@ -1,9 +1,8 @@
 export const setActiveGame = (gameId) => async (dispatch, getState) => {
-  const currState = await getState()
-  let game = null;
-  currState.gameReducer.games.forEach((element) => {
+  const currState = getState()
+  let game = currState.gameReducer.games.find((element) => {
     if (element.id === gameId) {
-      game = element
+      return true
     }
   })
   dispatch({
