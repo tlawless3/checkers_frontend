@@ -2,7 +2,7 @@ import React, {
   Component
 } from 'react';
 import { connect } from 'react-redux'
-import { Login, Create, Home, Friends, Profile } from './components/index'
+import { Login, Create, Home, Friends, Profile, CreateGame } from './components/index'
 import { getUserConditionally } from './actions/user';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import './App.css';
@@ -25,6 +25,7 @@ class App extends Component {
           <Switch>
             <Route path='/friends' component={Friends} />
             <Route path='/profile' component={Profile} />
+            <Route path='/createGame' component={CreateGame} />
             <Route path='/home' component={Home} />
             <Redirect from='/' to='/home' />
           </Switch>

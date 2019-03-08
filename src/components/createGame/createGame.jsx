@@ -1,10 +1,11 @@
 import React, {
   Component
 } from 'react';
+import Navbar from '../navbar/navbar'
 import { connect } from 'react-redux'
 import './createGame.css';
 
-class Login extends Component {
+class CreateGame extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -15,6 +16,8 @@ class Login extends Component {
   render() {
     return (
       <div className='createGamePageWrapper'>
+        <Navbar />
+        createGame
       </div>
     )
   }
@@ -27,4 +30,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateGame);

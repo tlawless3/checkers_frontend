@@ -2,7 +2,6 @@ import React, {
   Component
 } from 'react';
 import { connect } from 'react-redux'
-import ReactDOM from 'react-dom';
 import './home.css'
 import { Board, Navbar } from '../index'
 import Sidebar from './sidebar/sidebar'
@@ -18,7 +17,6 @@ class Home extends Component {
     }
 
     this.updateBoard = this.updateBoard.bind(this)
-    this.setActiveGameAndReload = this.setActiveGameAndReload.bind(this)
   }
 
   async componentDidMount() {
@@ -52,12 +50,6 @@ class Home extends Component {
     await this.props.updateAcitveGame(requestObj)
     await this.props.fetchUserGames()
     await this.props.setActiveGame(this.props.activeGameReducer.activeGame.id)
-  }
-
-
-  async setActiveGameAndReload(gameId) {
-    await this.props.fetchUserGames()
-    await this.props.setActiveGame(gameId)
   }
 
   render() {

@@ -26,3 +26,7 @@ export {
   default as Profile
 }
 from './profile/profile'
+export {
+  default as CreateGame
+}
+from './createGame/createGame'

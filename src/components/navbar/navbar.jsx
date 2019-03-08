@@ -34,9 +34,11 @@ class Navbar extends Component {
               Home
             </div>
           </NavLink>
-          <div className='createGame button'>
-            Create Game
-          </div>
+          <NavLink to='/createGame' className='link'>
+            <div className='createGame button'>
+              Create Game
+            </div>
+          </NavLink>
           <NavLink to='/friends' className='link'>
             <div className='friends button'>
               Friends
