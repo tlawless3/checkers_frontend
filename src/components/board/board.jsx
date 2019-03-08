@@ -12,7 +12,6 @@ class Board extends Component {
       selected: false,
       selectedSquare: {},
       availabileTiles: [],
-      piecesWithJumps: [],
     }
 
     this.drawBoard = this.drawBoard.bind(this)
@@ -20,7 +19,6 @@ class Board extends Component {
     this.handleClick = this.handleClick.bind(this)
     this.drawHighlights = this.drawHighlights.bind(this)
     this.generatePossibleMoves = this.generatePossibleMoves.bind(this)
-    this.checkForJumps = this.checkForJumps.bind(this)
   }
 
   drawBoard() {
@@ -133,57 +131,57 @@ class Board extends Component {
     })
   }
 
-  generatePossibleMoves(jumpsOnly, xCoord, yCoord) {
+  generatePossibleMoves() {
     const board = this.props.board
     const rows = board.length
     //looking for redTurn blackTurn
     const opposingTeam = this.props.activeGame.status === 'redTurn' ? 'black' : 'red'
     // const opposingTeam = 'black'
-    const x = this.state.selectedSquare.x || xCoord
-    const y = this.state.selectedSquare.y || yCoord
+    const x = this.state.selectedSquare.x
+    const y = this.state.selectedSquare.y
     const king = board[x][y].king
     let availabileTiles = []
     if (opposingTeam === 'black') {
-      if (y + 1 < rows && x + 1 < rows && board[x + 1][y + 1].color === 'empty' && !jumpsOnly) {
+      if (y + 1 < rows && x + 1 < rows && board[x + 1][y + 1].color === 'empty') {
         availabileTiles.push([x + 1, y + 1])
       } else if (y + 2 < rows && x + 2 < rows && board[x + 1][y + 1].color === opposingTeam && board[x + 2][y + 2].color === 'empty') {
         availabileTiles.push([x + 2, y + 2])
       }
-      if (y + 1 < rows && x - 1 >= 0 && board[x - 1][y + 1].color === 'empty' && !jumpsOnly) {
+      if (y + 1 < rows && x - 1 >= 0 && board[x - 1][y + 1].color === 'empty') {
         availabileTiles.push([x - 1, y + 1])
       } else if (y + 2 < rows && x - 2 >= 0 && board[x - 1][y + 1].color === opposingTeam && board[x - 2][y + 2].color === 'empty') {
         availabileTiles.push([x - 2, y + 2])
       }
       if (king) {
-        if (y - 1 >= 0 && x + 1 < rows && board[x + 1][y - 1].color === 'empty' && !jumpsOnly) {
+        if (y - 1 >= 0 && x + 1 < rows && board[x + 1][y - 1].color === 'empty') {
           availabileTiles.push([x + 1, y - 1])
         } else if (y - 2 >= 0 && x + 2 < rows && board[x + 1][y - 1].color === opposingTeam && board[x + 2][y - 2].color === 'empty') {
           availabileTiles.push([x + 2, y - 2])
         }
-        if (y - 1 >= 0 && x - 1 >= 0 && board[x - 1][y - 1].color === 'empty' && !jumpsOnly) {
+        if (y - 1 >= 0 && x - 1 >= 0 && board[x - 1][y - 1].color === 'empty') {
           availabileTiles.push([x - 1, y - 1])
         } else if (y - 2 >= 0 && x - 2 >= 0 && board[x - 1][y - 1].color === opposingTeam && board[x - 2][y - 2].color === 'empty') {
           availabileTiles.push([x - 2, y - 2])
         }
       }
     } else {
-      if (y - 1 >= 0 && x + 1 < rows && board[x + 1][y - 1].color === 'empty' && !jumpsOnly) {
+      if (y - 1 >= 0 && x + 1 < rows && board[x + 1][y - 1].color === 'empty') {
         availabileTiles.push([x + 1, y - 1])
       } else if (y - 2 >= 0 && x + 2 < rows && board[x + 1][y - 1].color === opposingTeam && board[x + 2][y - 2].color === 'empty') {
         availabileTiles.push([x + 2, y - 2])
       }
-      if (y - 1 >= 0 && x - 1 >= 0 && board[x - 1][y - 1].color === 'empty' && !jumpsOnly) {
+      if (y - 1 >= 0 && x - 1 >= 0 && board[x - 1][y - 1].color === 'empty') {
         availabileTiles.push([x - 1, y - 1])
       } else if (y - 2 >= 0 && x - 2 >= 0 && board[x - 1][y - 1].color === opposingTeam && board[x - 2][y - 2].color === 'empty') {
         availabileTiles.push([x - 2, y - 2])
       }
       if (king) {
-        if (y + 1 < rows && x + 1 < rows && board[x + 1][y + 1].color === 'empty' && !jumpsOnly) {
+        if (y + 1 < rows && x + 1 < rows && board[x + 1][y + 1].color === 'empty') {
           availabileTiles.push([x + 1, y + 1])
         } else if (y + 2 < rows && x + 2 < rows && board[x + 1][y + 1].color === opposingTeam && board[x + 2][y + 2].color === 'empty') {
           availabileTiles.push([x + 2, y + 2])
         }
-        if (y + 1 < rows && x - 1 >= 0 && board[x - 1][y + 1].color === 'empty' && !jumpsOnly) {
+        if (y + 1 < rows && x - 1 >= 0 && board[x - 1][y + 1].color === 'empty') {
           availabileTiles.push([x - 1, y + 1])
         } else if (y + 2 < rows && x - 2 >= 0 && board[x - 1][y + 1].color === opposingTeam && board[x - 2][y + 2].color === 'empty') {
           availabileTiles.push([x - 2, y + 2])
@@ -200,53 +198,6 @@ class Board extends Component {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.drawBoard()
     this.drawPieces()
-  }
-
-  checkForJumps() {
-    const board = this.props.board
-    let piecesWithJumps = []
-
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board.length; j++) {
-        if (this.props.activeGame.status === 'redTurn') {
-          if (board[i][j].color === 'red') {
-            const possibleMoves = this.generatePossibleMoves(true, i, j)
-            possibleMoves.map(move => {
-              if (Math.abs(move[0] - i) > 1 && Math.abs(move[1] - j) > 1) {
-                piecesWithJumps.push([i, j])
-              }
-            })
-          }
-        }
-        if (this.props.activeGame.status === 'blackTurn') {
-          if (board[i][j].color === 'black') {
-            const possibleMoves = this.generatePossibleMoves(true, i, j)
-            possibleMoves.map(move => {
-              if (Math.abs(move[0] - i) > 1 && Math.abs(move[1] - j) > 1) {
-                piecesWithJumps.push([i, j])
-              }
-            })
-          }
-        }
-      }
-    }
-    if (piecesWithJumps.length > 1) {
-      console.log(piecesWithJumps)
-    }
-    return piecesWithJumps
-  }
-
-  checkValidSelection(x, y) {
-    if (this.state.piecesWithJumps.length > 0) {
-      console.log(this.state.piecesWithJumps)
-      for (let i = 0; i < this.state.piecesWithJumps.length; i++) {
-        if (this.state.piecesWithJumps[i][0] === x && this.state.piecesWithJumps[i][1] === y) {
-          return true
-        }
-      }
-      return false
-    }
-    return true
   }
 
   checkValidMove(x, y) {
@@ -300,7 +251,6 @@ class Board extends Component {
           newBoard[column][row].king = newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].king
           newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color = 'empty'
         }
-        //move the piece
         //capturing logic
         if (Math.abs(column - this.state.selectedSquare.x) > 1 && Math.abs(row - this.state.selectedSquare.y) > 1) {
           if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === 2) {
@@ -317,6 +267,11 @@ class Board extends Component {
           await this.props.updateBoard(newBoard, false)
         }
       }
+      this.setState({
+        selected: false,
+        selectedSquare: {},
+        availabileTiles: []
+      })
     }
   }
 
