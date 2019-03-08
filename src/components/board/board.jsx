@@ -272,110 +272,50 @@ class Board extends Component {
     const column = (Math.floor(x / ratio))
     const row = (Math.floor(y / ratio))
     const square = board[column][row]
-    const jumps = this.checkForJumps()
-    //these two huge chunks of code below are largely similar
-    //
-    //
-    //if there are no jump
-    if (jumps.length < 1) {
-      // top condition is turn protection enabled
-      if (!this.state.selected && ((this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black')) && this.checkValidSelection(column, row)) {
-        // if (!this.state.selected) {
-        this.setState({
-          selectedSquare: { x: column, y: row },
-          selected: true
-        }, () => {
-          return (
-            this.setState({
-              availabileTiles: this.generatePossibleMoves(false, column, row)
-            }, () => (
-              this.drawHighlights()
-            )
-            ))
-        })
-      } else if (this.state.selected) {
-        if (this.checkValidMove(column, row)) {
-          let newBoard = board.slice()
+    // top condition is turn protection enabled
+    if (!this.state.selected && ((this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black'))) {
+      // if (!this.state.selected) {
+      this.setState({
+        selectedSquare: { x: column, y: row },
+        selected: true
+      }, () => {
+        return (
+          this.setState({
+            availabileTiles: this.generatePossibleMoves()
+          }, () => (
+            this.drawHighlights()
+          )
+          ))
+      })
+    } else if (this.state.selected) {
+      if (this.checkValidMove(column, row)) {
+        let newBoard = board.slice()
+        //king making logic
+        if ((newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color === 'black' && row === 0) || (newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color === 'red' && row === rows - 1)) {
+          newBoard[column][row].king = true
+          newBoard[column][row].color = newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color
+          newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color = 'empty'
+        } else {
           newBoard[column][row].color = newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color
           newBoard[column][row].king = newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].king
-          //kingmaking logic
-          if ((newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color === 'black' && row === 0) || ((newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color === 'red' && row === rows - 1))) {
-            newBoard[column][row].king = true
-          }
           newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color = 'empty'
-          //capturing logic
-          if (Math.abs(column - this.state.selectedSquare.x) > 1 && Math.abs(row - this.state.selectedSquare.y) > 1) {
-            if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === 2) {
-              newBoard[this.state.selectedSquare.x + 1][this.state.selectedSquare.y + 1].color = 'empty'
-            } else if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === -2) {
-              newBoard[this.state.selectedSquare.x + 1][this.state.selectedSquare.y - 1].color = 'empty'
-            } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === 2) {
-              newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y + 1].color = 'empty'
-            } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === -2) {
-              newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y - 1].color = 'empty'
-            }
-          }
-          await this.props.updateBoard(newBoard)
         }
-        this.clearAndRedrawBoard()
-        this.setState({
-          selectedSquare: {},
-          selected: false,
-          piecesWithJumps: []
-        })
-      }
-    }
-    //
-    //
-    //if there are possible jumps
-    else {
-      if (!this.state.selected && ((this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black')) && this.checkValidSelection(column, row)) {
-        this.setState({
-          piecesWithJumps: jumps,
-          selectedSquare: { x: column, y: row },
-          selected: true
-        }, () => {
-          return (
-            this.setState({
-              availabileTiles: this.generatePossibleMoves(true, column, row)
-            }, () => (
-              this.drawHighlights()
-            )
-            ))
-        })
-      } else if (this.state.selected) {
-        if (this.checkValidMove(column, row)) {
-          let newBoard = board.slice()
-          newBoard[column][row].color = newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color
-          newBoard[column][row].king = newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].king
-          //kingmaking logic
-          if ((newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color === 'black' && row === 0) || ((newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color === 'red' && row === rows - 1))) {
-            newBoard[column][row].king = true
+        //move the piece
+        //capturing logic
+        if (Math.abs(column - this.state.selectedSquare.x) > 1 && Math.abs(row - this.state.selectedSquare.y) > 1) {
+          if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === 2) {
+            newBoard[this.state.selectedSquare.x + 1][this.state.selectedSquare.y + 1].color = 'empty'
+          } else if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === -2) {
+            newBoard[this.state.selectedSquare.x + 1][this.state.selectedSquare.y - 1].color = 'empty'
+          } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === 2) {
+            newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y + 1].color = 'empty'
+          } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === -2) {
+            newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y - 1].color = 'empty'
           }
-          newBoard[this.state.selectedSquare.x][this.state.selectedSquare.y].color = 'empty'
-          //capturing logic
-          if (Math.abs(column - this.state.selectedSquare.x) > 1 && Math.abs(row - this.state.selectedSquare.y) > 1) {
-            if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === 2) {
-              newBoard[this.state.selectedSquare.x + 1][this.state.selectedSquare.y + 1].color = 'empty'
-            } else if (column - this.state.selectedSquare.x === 2 && row - this.state.selectedSquare.y === -2) {
-              newBoard[this.state.selectedSquare.x + 1][this.state.selectedSquare.y - 1].color = 'empty'
-            } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === 2) {
-              newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y + 1].color = 'empty'
-            } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === -2) {
-              newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y - 1].color = 'empty'
-            }
-            this.setState({
-              piecesWithJumps: [column, row]
-            })
-          }
-          await this.props.updateBoard(newBoard)
+          await this.props.updateBoard(newBoard, true)
+        } else {
+          await this.props.updateBoard(newBoard, false)
         }
-        this.clearAndRedrawBoard()
-        this.setState({
-          selectedSquare: {},
-          selected: false,
-          piecesWithJumps: []
-        })
       }
     }
   }
