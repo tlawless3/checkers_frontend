@@ -30,10 +30,12 @@ class Home extends Component {
     // activeGameId ? this.props.setActiveGame(activeGameId.activeGame.id) : () => null
   }
 
-  async updateBoard(newBoard, jumping) {
+  async updateBoard(newBoard, jumping, winState) {
     const generateStatus = () => {
-      if (jumping) {
+      if (jumping && !winState) {
         return this.props.activeGameReducer.activeGame.status
+      } else if (winState) {
+        return (this.props.activeGameReducer.activeGame.status === 'redTurn' ? 'redWin' : 'blackWin')
       } else {
         return (this.props.activeGameReducer.activeGame.status === 'redTurn' ? 'blackTurn' : 'redTurn')
       }

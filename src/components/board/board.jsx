@@ -210,6 +210,24 @@ class Board extends Component {
     return false
   }
 
+  checkWinState(board) {
+    let redRemaining = false
+    let blackRemaining = false
+    board.map(row => {
+      row.map(square => {
+        if (square.color === 'red') {
+          redRemaining = true
+        } else if (square.color === 'black') {
+          blackRemaining = true
+        }
+      })
+    })
+    if (!blackRemaining || !redRemaining) {
+      return true
+    }
+    return false
+  }
+
   async handleClick(event) {
     const board = this.props.board
     const resolution = this.props.resolution
@@ -262,9 +280,10 @@ class Board extends Component {
           } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === -2) {
             newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y - 1].color = 'empty'
           }
-          await this.props.updateBoard(newBoard, true)
+          //updateBoard(newBoard, jumping, winState
+          await this.props.updateBoard(newBoard, true, this.checkWinState(newBoard))
         } else {
-          await this.props.updateBoard(newBoard, false)
+          await this.props.updateBoard(newBoard, false, false)
         }
       }
       this.setState({
