@@ -108,6 +108,12 @@ class Board extends Component {
 
   componentDidMount() {
     this.clearAndRedrawBoard()
+    if (this.props.activeGame && this.props.activeGame.jumpingPiece) {
+      this.setState({
+        jumping: true,
+        jumpingPiece: this.props.activeGame.jumpingPiece
+      })
+    }
   }
 
   componentDidUpdate() {
@@ -257,7 +263,7 @@ class Board extends Component {
 
     const checkJumpingPiece = (xCoord, yCoord) => {
       let result = false
-      if (this.state.jumpingPiece[0] === xCoord && this.state.jumpingPiece[1] === yCoord) {
+      if (this.state.jumpingPiece[0] == xCoord && this.state.jumpingPiece[1] == yCoord) {
         result = true
       }
       return result
@@ -279,6 +285,10 @@ class Board extends Component {
 
     //just seperated logic of when there are jumps/when there aren't could do them together at later date right now there's a lot of code
     //When there are no jumps
+    //
+    //
+    //
+    //
     if (possibleJumps.length === 0 && this.state.jumping === false) {
       // turn protection, need to enable player id tied to color protection
       if (!this.state.selected && ((this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black'))) {
@@ -318,10 +328,10 @@ class Board extends Component {
             } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === -2) {
               newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y - 1].color = 'empty'
             }
-            //updateBoard(newBoard, jumping, winState)
-            await this.props.updateBoard(newBoard, true, this.checkWinState(newBoard))
+            //updateBoard(newBoard, jumping, winState,)
+            await this.props.updateBoard(newBoard, true, this.checkWinState(newBoard), [column, row])
           } else {
-            await this.props.updateBoard(newBoard, false, false)
+            await this.props.updateBoard(newBoard, false, false, [])
           }
         }
         this.setState({
@@ -332,6 +342,11 @@ class Board extends Component {
       }
     }
     //turn when jumping
+    //
+    //
+    //
+    //
+    //
     else if (possibleJumps.length > 0 && !this.state.jumping) {
       if (!this.state.selected && ((this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black')) && checkCoordsForJump(column, row, possibleJumps)) {
         this.setState({
@@ -381,10 +396,8 @@ class Board extends Component {
 
           let newPossibleJumps = this.generatePossibleMoves(column, row, true)
 
-          console.log('jumps', newPossibleJumps)
-
           if (newPossibleJumps.length === 0) {
-            await this.props.updateBoard(newBoard, false, this.checkWinState(newBoard))
+            await this.props.updateBoard(newBoard, false, this.checkWinState(newBoard), [])
             this.setState({
               // selected: false,
               // selectedSquare: {},
@@ -393,7 +406,7 @@ class Board extends Component {
               jumpingPiece: []
             })
           } else {
-            await this.props.updateBoard(newBoard, true, this.checkWinState(newBoard))
+            await this.props.updateBoard(newBoard, true, this.checkWinState(newBoard), [column, row])
             this.setState({
               // selected: false,
               // selectedSquare: {},
@@ -411,8 +424,13 @@ class Board extends Component {
       }
     }
     //turn when already jumped
+    //
+    //
+    //
+    //
+    //
+    //
     else if (possibleJumps.length >= 0 && this.state.jumping) {
-      console.log('isjumpingPiece', checkJumpingPiece(column, row))
       if (!this.state.selected && ((this.props.activeGame.status === 'redTurn' && square.color === 'red') || (this.props.activeGame.status === 'blackTurn' && square.color === 'black')) && checkJumpingPiece(column, row)) {
         this.setState({
           selectedSquare: { x: column, y: row },
@@ -454,10 +472,8 @@ class Board extends Component {
           }
           let newPossibleJumps = this.generatePossibleMoves(column, row, true)
 
-          console.log('jumpsAgain', newPossibleJumps)
-
           if (newPossibleJumps.length === 0) {
-            await this.props.updateBoard(newBoard, false, this.checkWinState(newBoard))
+            await this.props.updateBoard(newBoard, false, this.checkWinState(newBoard), [])
             this.setState({
               // selected: false,
               // selectedSquare: {},
@@ -466,7 +482,7 @@ class Board extends Component {
               jumpingPiece: []
             })
           } else {
-            await this.props.updateBoard(newBoard, true, this.checkWinState(newBoard))
+            await this.props.updateBoard(newBoard, true, this.checkWinState(newBoard), [column, row])
             this.setState({
               // selected: false,
               // selectedSquare: {},

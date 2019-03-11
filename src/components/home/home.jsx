@@ -28,7 +28,7 @@ class Home extends Component {
     // activeGameId ? this.props.setActiveGame(activeGameId.activeGame.id) : () => null
   }
 
-  async updateBoard(newBoard, jumping, winState) {
+  async updateBoard(newBoard, jumping, winState, jumpingPieceCoords) {
     const generateStatus = () => {
       if (jumping && !winState) {
         return this.props.activeGameReducer.activeGame.status
@@ -38,13 +38,23 @@ class Home extends Component {
         return (this.props.activeGameReducer.activeGame.status === 'redTurn' ? 'blackTurn' : 'redTurn')
       }
     }
+    const generateJumpingPiece = () => {
+      console.log(jumpingPieceCoords)
+      if (jumpingPieceCoords.length > 0) {
+        console.log(jumpingPieceCoords)
+        return jumpingPieceCoords
+      }
+      else return []
+    }
     const status = generateStatus()
+    const jumpingPiece = generateJumpingPiece()
     const requestObj = {
       game: {
         gameId: this.props.activeGameReducer.activeGame.id,
         board: newBoard,
         playerColors: this.props.activeGameReducer.activeGame.playerColors,
-        status: status
+        status: status,
+        jumpingPiece: jumpingPiece
       }
     }
     await this.props.updateAcitveGame(requestObj)
