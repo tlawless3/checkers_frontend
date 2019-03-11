@@ -108,10 +108,16 @@ class Board extends Component {
 
   componentDidMount() {
     this.clearAndRedrawBoard()
-    if (this.props.activeGame && this.props.activeGame.jumpingPiece) {
+    if (this.props.activeGame && this.props.activeGame.jumpingPiece.length > 0) {
+      console.log('hitting')
       this.setState({
         jumping: true,
         jumpingPiece: this.props.activeGame.jumpingPiece
+      })
+    } else {
+      this.setState({
+        jumping: false,
+        jumpingPiece: []
       })
     }
   }
