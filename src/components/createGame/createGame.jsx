@@ -2,6 +2,7 @@ import React, {
   Component
 } from 'react';
 import Navbar from '../navbar/navbar'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { fetchFriends } from '../../actions/friend'
 import './createGame.css';
@@ -14,6 +15,7 @@ class CreateGame extends Component {
       playerColor: 'red',
       opponent: 'AI',
       opponentUsername: null,
+      friends: [],
       error: false
     }
 
@@ -25,6 +27,12 @@ class CreateGame extends Component {
 
   }
 
+  generateList() {
+    return (this.state.friends.map(friend => {
+      return (<option key={friend.userInfo.username} value={friend.userInfo.username} />)
+    }))
+  }
+
   handleChange(event) {
     const key = event.target.name
     const value = event.target.value
@@ -33,8 +41,32 @@ class CreateGame extends Component {
     this.setState(stateObj)
   }
 
-  componentDidMount() {
-    this.props.fetchFriends()
+  async fetchProfileData() {
+    const userObjs = this.props.friendReducer.friends.map(async (friend) => {
+      try {
+        const userInfo = await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/id', { user: { requestId: friend.friendId } }, {
+          withCredentials: true,
+        })
+        return ({
+          userInfo: { ...userInfo.data },
+        })
+      } catch (err) {
+        console.error(err.message)
+      }
+    })
+    return await Promise.all(userObjs)
+  }
+
+  async fetchFriendsData() {
+    await this.props.fetchFriends()
+    const friendsData = await this.fetchProfileData()
+    this.setState({
+      friends: friendsData
+    })
+  }
+
+  async componentDidMount() {
+    await this.fetchFriendsData()
   }
 
   render() {
@@ -69,7 +101,10 @@ class CreateGame extends Component {
                 <div className='createHeader'>
                   Enter a friend's username:
                 </div>
-                <input name='opponentUsername' onChange={this.handleChange} type='text'></input>
+                <input name='opponentUsername' onChange={this.handleChange} type='text' list='friendsList'></input>
+                <datalist id='friendsList'>
+                  {this.generateList()}
+                </datalist>
               </div>
             ) : ''}
             <button type='submit'> Create Game </button>
