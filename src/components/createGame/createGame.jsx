@@ -10,8 +10,14 @@ class CreateGame extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      error: false,
+      boardSize: '8',
+      playerColor: 'red',
+      opponent: 'AI',
+      opponentUsername: null,
+      error: false
     }
+
+    this.handleChange = this.handleChange.bind(this)
   }
 
   handleSubmit() {
@@ -32,24 +38,36 @@ class CreateGame extends Component {
         <Navbar />
         <div className='createGameFormWrapper'>
           <form id='createGameForm'>
+            <div className='createHeader'>
+              Board Rows:
+            </div>
             <select name="boardSize" onChange={this.handleChange} form="createGameForm">
               <option value="8">8</option>
               <option value="10">10</option>
             </select>
-            <select name="color" onChange={this.handleChange} form="createGameForm">
+            <div className='createHeader'>
+              Choose your side:
+            </div>
+            <select name="playerColor" onChange={this.handleChange} form="createGameForm">
               <option value="red">red</option>
               <option value="black">black</option>
             </select>
+            <div className='createHeader'>
+              Select your opponent:
+            </div>
             <select name="opponent" onChange={this.handleChange} form="createGameForm">
               <option value="ai">AI</option>
               <option value="friend">friend</option>
             </select>
             {this.state.opponent === 'friend' ? (
-              <div>
-                <div>
+              <div className='usernameInput'>
+                <div className='createHeader'>
                   Enter a friend's username:
                 </div>
-                <input onChange={this.handleChange} type='text'></input>
+                <input name='opponentUsername' onChange={this.handleChange} type='text' list='friendName'></input>
+                <datalist id='friendName'>
+                  <option value='test' />
+                </datalist>
               </div>
             ) : ''}
             <button type='submit'> Create Game </button>
