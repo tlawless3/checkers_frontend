@@ -18,6 +18,7 @@ class CreateGame extends Component {
     }
 
     this.handleChange = this.handleChange.bind(this)
+    this.generateList = this.generateList.bind(this)
   }
 
   handleSubmit() {
@@ -30,6 +31,10 @@ class CreateGame extends Component {
     const stateObj = {}
     stateObj[key] = value
     this.setState(stateObj)
+  }
+
+  componentDidMount() {
+    this.props.fetchFriends()
   }
 
   render() {
@@ -64,10 +69,7 @@ class CreateGame extends Component {
                 <div className='createHeader'>
                   Enter a friend's username:
                 </div>
-                <input name='opponentUsername' onChange={this.handleChange} type='text' list='friendName'></input>
-                <datalist id='friendName'>
-                  <option value='test' />
-                </datalist>
+                <input name='opponentUsername' onChange={this.handleChange} type='text'></input>
               </div>
             ) : ''}
             <button type='submit'> Create Game </button>
