@@ -27,7 +27,6 @@ const Sidebar = (props) => {
         }
       }
     })
-    //change this later to deal with status
     return components
   }
 

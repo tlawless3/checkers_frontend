@@ -3,6 +3,13 @@ import './gamebox.css';
 import { Board } from '../../../index'
 
 const Gamebox = (props) => {
+  const truncateDisplayName = (displayName) => {
+    if (displayName.length > 15) {
+      return displayName.substr(0, 12) + '...'
+    } else {
+      return displayName
+    }
+  }
   console.log(props.opponent)
   return (
     <div className={props.activeBoard ? 'boxWrapper activeBoard' : 'boxWrapper'} key={props.game.id} onClick={() => props.setActiveGame(props.game.id)}>
@@ -11,10 +18,10 @@ const Gamebox = (props) => {
       </div>
       <div className='gameInfo'>
         <div>
-          {props.opponent.userInfo.displayName}
+          VS: {truncateDisplayName(props.opponent.userInfo.displayName)}
         </div>
         <div>
-          {props.game.playerColors.black === props.user.userId ? 'Black' : 'Red'}
+          Color: {props.game.playerColors.black === props.user.userId ? 'Black' : 'Red'}
         </div>
         <div>
           Status: {props.game.status}
