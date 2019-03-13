@@ -19,7 +19,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  align-content: flex-start;
   height: 100vh;
+}
+
+.error {
+  position: relative;
+  height: 20px;
+  background-color: #ff9393;
+  width: 220px;
 }
 
 .usernameInput {
@@ -33,6 +41,7 @@
   background-color: white;
   padding: 10px;
   border-radius: 5px;
+  width: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;

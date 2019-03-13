@@ -4,7 +4,9 @@ import React, {
 import Navbar from '../navbar/navbar'
 import axios from 'axios'
 import { connect } from 'react-redux'
+import { fetchUserGames } from '../../actions/game'
 import { fetchFriends } from '../../actions/friend'
+import { setActiveGame } from '../../actions/activeGame'
 import './createGame.css';
 
 class CreateGame extends Component {
@@ -12,30 +14,38 @@ class CreateGame extends Component {
     super(props)
     this.state = {
       boardSize: '8',
-      playerColor: 'red',
+      playerColors: 'red',
       opponent: 'AI',
       opponentId: '',
       friends: [],
       error: false
     }
 
+    this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleFriendChange = this.handleFriendChange.bind(this)
     this.generateList = this.generateList.bind(this)
   }
 
   validateForm(form) {
-
+    let valid = false
+    console.log(form.game)
+    if ((form.game.playerColors.black.length > 0) && (form.game.playerColors.red.length > 0)) {
+      console.log('hitting')
+      valid = true
+    }
+    return valid
   }
 
-  handleSubmit() {
+  async handleSubmit(event) {
+    event.preventDefault()
     const generatePlayerColors = () => {
-      if (this.state.playerColor === 'red') {
+      if (this.state.playerColors === 'red') {
         return ({
           black: this.state.opponent === 'AI' ? 'AI' : this.state.opponentId,
           red: this.props.userReducer.user.userId
         })
-      } else if (this.state.playerColor === 'black') {
+      } else if (this.state.playerColors === 'black') {
         return ({
           red: this.state.opponent === 'AI' ? 'AI' : this.state.opponentId,
           black: this.props.userReducer.user.userId
@@ -47,9 +57,9 @@ class CreateGame extends Component {
       if (this.state.opponent === 'AI') {
         return 'blackTurn'
       } else if (this.state.opponent === 'friend') {
-        if (this.state.playerColor === 'red') {
+        if (this.state.playerColors === 'red') {
           return 'waitingBlack'
-        } else if (this.state.playerColor === 'black') {
+        } else if (this.state.playerColors === 'black') {
           return 'waitingRed'
         }
       }
@@ -61,6 +71,22 @@ class CreateGame extends Component {
         playerColors: generatePlayerColors(),
         status: generateStatus()
       }
+    }
+    if (this.validateForm(gameObj)) {
+      try {
+        const returnedGameId = await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/game/create', gameObj, {
+          withCredentials: true,
+        })
+        await this.props.fetchUserGames()
+        await this.props.setActiveGame(returnedGameId.data)
+        this.props.history.push('/home')
+      } catch (err) {
+        console.error(err.message)
+      }
+    } else {
+      this.setState({
+        error: true
+      })
     }
   }
 
@@ -80,7 +106,6 @@ class CreateGame extends Component {
 
   handleFriendChange(event) {
     const value = event.target.value
-    console.log(this.state.friends)
     this.setState({
       opponentId: ''
     })
@@ -127,6 +152,11 @@ class CreateGame extends Component {
         <Navbar />
         <div className='createGameFormWrapper'>
           <form id='createGameForm'>
+            {this.state.error ? (
+              <div className='error'>
+                Error Creating Game
+          </div>)
+              : ''}
             <div className='createHeader'>
               Board Rows:
             </div>
@@ -137,7 +167,7 @@ class CreateGame extends Component {
             <div className='createHeader'>
               Choose your side:
             </div>
-            <select name="playerColor" onChange={this.handleChange} form="createGameForm">
+            <select name="playerColors" onChange={this.handleChange} form="createGameForm">
               <option value="red">red</option>
               <option value="black">black</option>
             </select>
@@ -159,7 +189,7 @@ class CreateGame extends Component {
                 </datalist>
               </div>
             ) : ''}
-            <button type='submit'> Create Game </button>
+            <button type='submit' onClick={this.handleSubmit}> Create Game </button>
           </form>
         </div>
       </div>
@@ -173,6 +203,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchFriends: () => dispatch(fetchFriends()),
+  setActiveGame: (gameId) => dispatch(setActiveGame(gameId)),
+  fetchUserGames: () => dispatch(fetchUserGames())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateGame);

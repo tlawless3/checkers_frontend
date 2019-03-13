@@ -3,9 +3,6 @@ import './gamebox.css';
 import { Board } from '../../../index'
 
 const Gamebox = (props) => {
-  console.log(props)
-  console.log(props.game.playerColors.black)
-  console.log(props.user.userId)
   return (
     <div className={props.activeBoard ? 'boxWrapper activeBoard' : 'boxWrapper'} key={props.game.id} onClick={() => props.setActiveGame(props.game.id)}>
       <div className='boardWrapper'>
