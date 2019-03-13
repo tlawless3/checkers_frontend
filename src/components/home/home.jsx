@@ -2,10 +2,12 @@ import React, {
   Component
 } from 'react';
 import { connect } from 'react-redux'
+import axios from 'axios'
 import './home.css'
 import { Board, Navbar } from '../index'
 import Sidebar from './sidebar/sidebar'
 import { fetchGamesConditionally, updateAcitveGame, fetchUserGames } from '../../actions/game'
+import { fetchFriends } from '../../actions/friend'
 import { setActiveGame } from '../../actions/activeGame'
 import { loadState } from '../../localstorage'
 
@@ -14,12 +16,15 @@ class Home extends Component {
     super(props)
     this.state = {
       error: false,
+      friends: []
     }
 
     this.updateBoard = this.updateBoard.bind(this)
+    this.fetchFriendsData = this.fetchFriendsData.bind(this)
   }
 
   async componentDidMount() {
+    await this.fetchFriendsData()
     await this.props.fetchGamesConditionally()
     const activeGameId = await loadState()
     if (activeGameId && !this.props.gameReducer.isFetching) {
@@ -62,14 +67,40 @@ class Home extends Component {
     await this.props.setActiveGame(this.props.activeGameReducer.activeGame.id)
   }
 
+  async fetchProfileData() {
+    const userObjs = this.props.friendReducer.friends.map(async (friend) => {
+      try {
+        const userInfo = await axios.post(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/id', { user: { requestId: friend.friendId } }, {
+          withCredentials: true,
+        })
+        return ({
+          userInfo: { ...userInfo.data, friendId: friend.friendId },
+        })
+      } catch (err) {
+        console.error(err.message)
+      }
+    })
+    return await Promise.all(userObjs)
+  }
+
+  async fetchFriendsData() {
+    await this.props.fetchFriends()
+    const friendsData = await this.fetchProfileData()
+    console.log(friendsData)
+    this.setState({
+      friends: friendsData
+    })
+  }
+
   render() {
+    console.log(this.state)
     return (
       <div className='homePageWrapper'>
         <Navbar />
         <div className='activeBoardWrapper'>
           {this.props.activeGameReducer.activeGame ? <Board className='activeBoard' updateBoard={this.updateBoard} board={this.props.activeGameReducer.activeGame.board} activeGame={this.props.activeGameReducer.activeGame} resolution={640} active={true} /> : ''}
         </div>
-        {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} activeGameId={this.props.activeGameReducer.activeGame ? this.props.activeGameReducer.activeGame.id : null} user={this.props.userReducer.user} games={this.props.gameReducer.games} /> : ''}
+        {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} activeGameId={this.props.activeGameReducer.activeGame ? this.props.activeGameReducer.activeGame.id : null} user={this.props.userReducer.user} friends={this.state.friends} games={this.props.gameReducer.games} /> : ''}
       </div>
     )
   }
@@ -83,7 +114,8 @@ const mapDispatchToProps = dispatch => ({
   fetchUserGames: () => dispatch(fetchUserGames()),
   fetchGamesConditionally: () => dispatch(fetchGamesConditionally()),
   setActiveGame: (gameId) => dispatch(setActiveGame(gameId)),
-  updateAcitveGame: (newGameState) => dispatch(updateAcitveGame(newGameState))
+  updateAcitveGame: (newGameState) => dispatch(updateAcitveGame(newGameState)),
+  fetchFriends: () => dispatch(fetchFriends())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
