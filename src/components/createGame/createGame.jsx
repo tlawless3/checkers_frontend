@@ -14,12 +14,13 @@ class CreateGame extends Component {
       boardSize: '8',
       playerColor: 'red',
       opponent: 'AI',
-      opponentUsername: null,
+      opponentId: '',
       friends: [],
       error: false
     }
 
     this.handleChange = this.handleChange.bind(this)
+    this.handleFriendChange = this.handleFriendChange.bind(this)
     this.generateList = this.generateList.bind(this)
   }
 
@@ -41,6 +42,21 @@ class CreateGame extends Component {
     this.setState(stateObj)
   }
 
+  handleFriendChange(event) {
+    const value = event.target.value
+    console.log(this.state.friends)
+    this.setState({
+      opponentId: ''
+    })
+    this.state.friends.map(friend => {
+      if (friend.userInfo.username === value) {
+        this.setState({
+          opponentId: friend.userInfo.friendId
+        })
+      }
+    })
+  }
+
   async fetchProfileData() {
     const userObjs = this.props.friendReducer.friends.map(async (friend) => {
       try {
@@ -48,7 +64,7 @@ class CreateGame extends Component {
           withCredentials: true,
         })
         return ({
-          userInfo: { ...userInfo.data },
+          userInfo: { ...userInfo.data, friendId: friend.friendId },
         })
       } catch (err) {
         console.error(err.message)
@@ -94,14 +110,14 @@ class CreateGame extends Component {
             </div>
             <select name="opponent" onChange={this.handleChange} form="createGameForm">
               <option value="ai">AI</option>
-              <option value="friend">friend</option>
+              <option value="friend">Friend</option>
             </select>
             {this.state.opponent === 'friend' ? (
               <div className='usernameInput'>
                 <div className='createHeader'>
                   Enter a friend's username:
                 </div>
-                <input name='opponentUsername' onChange={this.handleChange} type='text' list='friendsList'></input>
+                <input name='opponentUsername' onChange={this.handleFriendChange} type='text' list='friendsList'></input>
                 <datalist id='friendsList'>
                   {this.generateList()}
                 </datalist>
