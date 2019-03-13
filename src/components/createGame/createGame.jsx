@@ -24,8 +24,44 @@ class CreateGame extends Component {
     this.generateList = this.generateList.bind(this)
   }
 
-  handleSubmit() {
+  validateForm(form) {
 
+  }
+
+  handleSubmit() {
+    const generatePlayerColors = () => {
+      if (this.state.playerColor === 'red') {
+        return ({
+          black: this.state.opponent === 'AI' ? 'AI' : this.state.opponentId,
+          red: this.props.userReducer.user.userId
+        })
+      } else if (this.state.playerColor === 'black') {
+        return ({
+          red: this.state.opponent === 'AI' ? 'AI' : this.state.opponentId,
+          black: this.props.userReducer.user.userId
+        })
+      }
+    }
+
+    const generateStatus = () => {
+      if (this.state.opponent === 'AI') {
+        return 'blackTurn'
+      } else if (this.state.opponent === 'friend') {
+        if (this.state.playerColor === 'red') {
+          return 'waitingBlack'
+        } else if (this.state.playerColor === 'black') {
+          return 'waitingRed'
+        }
+      }
+    }
+
+    const gameObj = {
+      game: {
+        boardSize: this.state.boardSize,
+        playerColors: generatePlayerColors(),
+        status: generateStatus()
+      }
+    }
   }
 
   generateList() {
@@ -109,7 +145,7 @@ class CreateGame extends Component {
               Select your opponent:
             </div>
             <select name="opponent" onChange={this.handleChange} form="createGameForm">
-              <option value="ai">AI</option>
+              <option value="AI">AI</option>
               <option value="friend">Friend</option>
             </select>
             {this.state.opponent === 'friend' ? (

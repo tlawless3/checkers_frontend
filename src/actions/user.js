@@ -13,7 +13,7 @@ export const userLogin = (userLogin) => async (dispatch) => {
     })
     dispatch({
       type: 'RECIEVE_USER',
-      payload: user
+      payload: user.data
     })
   } catch {
     dispatch({
@@ -31,7 +31,7 @@ export const getUserConditionally = () => (dispatch, getState) => {
 }
 
 const getUserByToken = () => async (dispatch) => {
-  dispatch(requestUser())
+  dispatch(requestUser)
   try {
     const user = await axios.get(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/user/verify', {
       withCredentials: true

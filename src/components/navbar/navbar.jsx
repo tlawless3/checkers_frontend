@@ -15,7 +15,7 @@ class Navbar extends Component {
 
   handleLogout() {
     const eraseCookie = (name) => {
-      document.cookie = name + "=" + "" + "-1" + "; path=/";
+      document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
     const cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {
