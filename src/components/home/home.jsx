@@ -94,16 +94,54 @@ class Home extends Component {
     })
   }
 
-  async handleDeleteGame(gameId) {
-    console.log('delete func')
+  async handleDeleteGame(gameId, opponentId) {
+    const postObj = {
+      game: {
+        id: gameId
+      },
+      opponent: {
+        id: opponentId
+      }
+    }
+    await axios.put(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/game/delete', postObj, {
+      withCredentials: true
+    })
+    await this.props.fetchUserGames()
+    if (this.props.activeGameReducer.activeGame.id === gameId) {
+      this.props.setActiveGame()
+    }
   }
 
   async handleAcceptGame(gameId) {
     console.log('accept func')
+    const postObj = {
+      game: {
+        gameId,
+        status: 'blackTurn'
+      }
+    }
+    const response = await axios.put(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/game/update', postObj, {
+      withCredentials: true
+    })
+    console.log(response)
+    await this.props.fetchUserGames()
   }
 
-  async handleForefitGame(gameId) {
+  async handleForefitGame(gameId, playerColor) {
     console.log('forefit func')
+    const postObj = {
+      game: {
+        gameId,
+        status: playerColor === 'black' ? 'redWin' : 'blackWin',
+      },
+    }
+    console.log(postObj)
+    // try {
+    await axios.put(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/game/update', postObj, {
+      withCredentials: true
+    })
+    this.props.fetchUserGames()
+
   }
 
 

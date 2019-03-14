@@ -23,7 +23,7 @@
   height: 100vh;
 }
 
-.error {
+.errorCreateGame {
   position: relative;
   height: 20px;
   background-color: #ff9393;

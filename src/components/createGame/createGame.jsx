@@ -153,7 +153,7 @@ class CreateGame extends Component {
         <div className='createGameFormWrapper'>
           <form id='createGameForm'>
             {this.state.error ? (
-              <div className='error'>
+              <div className='errorCreateGame'>
                 Error Creating Game
           </div>)
               : ''}
