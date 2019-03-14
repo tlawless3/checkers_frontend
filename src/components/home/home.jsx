@@ -89,21 +89,20 @@ class Home extends Component {
   async fetchFriendsData() {
     await this.props.fetchFriends()
     const friendsData = await this.fetchProfileData()
-    console.log(friendsData)
     this.setState({
       friends: friendsData
     })
   }
 
-  async handleDeleteGame() {
+  async handleDeleteGame(gameId) {
     console.log('delete func')
   }
 
-  async handleAcceptGame() {
+  async handleAcceptGame(gameId) {
     console.log('accept func')
   }
 
-  async handleForefitGame() {
+  async handleForefitGame(gameId) {
     console.log('forefit func')
   }
 

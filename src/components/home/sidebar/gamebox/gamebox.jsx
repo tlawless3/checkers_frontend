@@ -36,7 +36,8 @@ const Gamebox = (props) => {
 
   return (
     <div className={props.activeBoard ? 'boxWrapper activeBoard' : 'boxWrapper'} key={props.game.id} onClick={() => props.setActiveGame(props.game.id)}>
-      {(props.game.status === 'waitingBlack' || props.game.status === 'waitingRed' || props.game.status === 'redWin' || props.game.status === 'blackWin' || props.game.status === 'draw') ? (<div onClick={() => props.handleDeleteGame(props.game.id)} className='deleteGame'><img alt='delete game' src={require('../../../../assets/exit.svg')}></img></div>) : ''}
+      {(props.game.status === 'waitingBlack' || props.game.status === 'waitingRed' || props.game.status === 'redWin' || props.game.status === 'blackWin' || props.game.status === 'draw') ?
+        (<div onClick={() => props.handleDeleteGame(props.game.id)} className='deleteGame'><img alt='delete game' src={require('../../../../assets/exit.svg')}></img></div>) : ''}
       {((props.game.status === 'waitingBlack' && (props.game.playerColors.black === props.user.userId)) || (props.game.status === 'waitingRed' && (props.game.playerColors.red === props.user.userId))) ? (<div onClick={() => props.handleAcceptGame(props.game.id)} className='acceptGame'>Accept</div>) : ''}
       {(props.game.status === 'redTurn' || props.game.status === 'blackTurn') ? (<div onClick={() => props.handleForefitGame(props.game.id)} className='forefitGame'>Forefit</div>) : ''}
       <div className='boardWrapper'>

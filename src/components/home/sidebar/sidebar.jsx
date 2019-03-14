@@ -14,7 +14,6 @@ const Sidebar = (props) => {
           return friend.userInfo.friendId == gameData.playerColors.black
         }
       })
-      console.log('this', friendInfo)
       if (!friendInfo) {
         friendInfo = { userInfo: { displayName: 'AI' } }
       }
