@@ -21,9 +21,9 @@ const Sidebar = (props) => {
       if (!usedBoards.includes(gameData.id)) {
         usedBoards.push(gameData.id)
         if (gameData.id === props.activeGameId) {
-          components.unshift(<Gamebox key={gameData.id} opponent={friendInfo} activeBoard={true} user={props.user} setActiveGame={props.setActiveGame} game={gameData} />)
+          components.unshift(<Gamebox handleAcceptGame={props.handleAcceptGame} handleForefitGame={props.handleForefitGame} handleDeleteGame={props.handleDeleteGame} key={gameData.id} opponent={friendInfo} activeBoard={true} user={props.user} setActiveGame={props.setActiveGame} game={gameData} />)
         } else {
-          components.push(<Gamebox key={gameData.id} opponent={friendInfo} user={props.user} setActiveGame={props.setActiveGame} game={gameData} />)
+          components.push(<Gamebox handleAcceptGame={props.handleAcceptGame} handleForefitGame={props.handleForefitGame} handleDeleteGame={props.handleDeleteGame} key={gameData.id} opponent={friendInfo} user={props.user} setActiveGame={props.setActiveGame} game={gameData} />)
         }
       }
     })

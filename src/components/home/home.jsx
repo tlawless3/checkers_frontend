@@ -21,6 +21,9 @@ class Home extends Component {
 
     this.updateBoard = this.updateBoard.bind(this)
     this.fetchFriendsData = this.fetchFriendsData.bind(this)
+    this.handleAcceptGame = this.handleAcceptGame.bind(this)
+    this.handleDeleteGame = this.handleDeleteGame.bind(this)
+    this.handleForefitGame = this.handleForefitGame.bind(this)
   }
 
   async componentDidMount() {
@@ -92,6 +95,19 @@ class Home extends Component {
     })
   }
 
+  async handleDeleteGame() {
+    console.log('delete func')
+  }
+
+  async handleAcceptGame() {
+    console.log('accept func')
+  }
+
+  async handleForefitGame() {
+    console.log('forefit func')
+  }
+
+
   render() {
     console.log(this.state)
     return (
@@ -100,7 +116,7 @@ class Home extends Component {
         <div className='activeBoardWrapper'>
           {this.props.activeGameReducer.activeGame ? <Board className='activeBoard' updateBoard={this.updateBoard} board={this.props.activeGameReducer.activeGame.board} activeGame={this.props.activeGameReducer.activeGame} resolution={640} active={true} /> : ''}
         </div>
-        {this.props.gameReducer.games ? <Sidebar setActiveGame={this.props.setActiveGame} activeGameId={this.props.activeGameReducer.activeGame ? this.props.activeGameReducer.activeGame.id : null} user={this.props.userReducer.user} friends={this.state.friends} games={this.props.gameReducer.games} /> : ''}
+        {this.props.gameReducer.games ? <Sidebar handleAcceptGame={this.handleAcceptGame} handleDeleteGame={this.handleDeleteGame} handleForefitGame={this.handleForefitGame} setActiveGame={this.props.setActiveGame} activeGameId={this.props.activeGameReducer.activeGame ? this.props.activeGameReducer.activeGame.id : null} user={this.props.userReducer.user} friends={this.state.friends} games={this.props.gameReducer.games} /> : ''}
       </div>
     )
   }
