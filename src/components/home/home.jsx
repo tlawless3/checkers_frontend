@@ -109,7 +109,6 @@ class Home extends Component {
 
 
   render() {
-    console.log(this.state)
     return (
       <div className='homePageWrapper'>
         <Navbar />

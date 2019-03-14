@@ -13,7 +13,7 @@ const FriendCard = (props) => {
   return (
     <div className='friendCardWrapper'>
       {props.friend.status === 'recieved' ? <div className='acceptButton' onClick={() => props.handleAccept(props.friend.userInfo.id)}>accept request</div> : ''}
-      <div className='declineButton' onClick={() => props.openDeleteModal(props.friend.userInfo.id)}><img src={require('../../../assets/exit.svg')}></img></div>
+      <div className='declineButton' onClick={() => props.openDeleteModal(props.friend.userInfo.id)}><img alt='delete friend' src={require('../../../assets/exit.svg')}></img></div>
       <div className='infoWrapper'>
         <div className='displayName'>
           {truncateDisplayName(props.friend.userInfo.displayName)}
