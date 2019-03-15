@@ -7,9 +7,12 @@ import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import configureStore from './store/store';
 import { saveState } from './localstorage';
+import io from 'socket.io-client';
 
 
 const store = configureStore()
+
+const socket = io(process.env.REACT_APP_SERVER_URL)
 
 store.subscribe(() => {
   saveState(store.getState().activeGameReducer)
