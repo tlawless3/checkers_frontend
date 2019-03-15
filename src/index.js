@@ -12,7 +12,9 @@ import io from 'socket.io-client';
 
 const store = configureStore()
 
-const socket = io(process.env.REACT_APP_SERVER_URL)
+export const socket = io.connect(process.env.REACT_APP_SERVER_URL)
+
+// socket.on('connect', () => { socket.emit('login') })
 
 store.subscribe(() => {
   saveState(store.getState().activeGameReducer)

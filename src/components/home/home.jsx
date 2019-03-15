@@ -10,6 +10,7 @@ import { fetchGamesConditionally, updateAcitveGame, fetchUserGames } from '../..
 import { fetchFriends } from '../../actions/friend'
 import { setActiveGame } from '../../actions/activeGame'
 import { loadState } from '../../localstorage'
+import { socket } from '../../index'
 
 class Home extends Component {
   constructor(props) {
@@ -33,7 +34,14 @@ class Home extends Component {
     if (activeGameId && !this.props.gameReducer.isFetching) {
       this.props.setActiveGame(activeGameId.activeGame.id)
     }
-    // activeGameId ? this.props.setActiveGame(activeGameId.activeGame.id) : () => null
+    socket.on('updatedGame', async () => {
+      await this.props.fetchUserGames()
+      await this.fetchFriendsData()
+      const activeGameId = await loadState()
+      if (activeGameId && !this.props.gameReducer.isFetching) {
+        this.props.setActiveGame(activeGameId.activeGame.id)
+      }
+    })
   }
 
   async updateBoard(newBoard, jumping, winState, jumpingPieceCoords) {
@@ -47,9 +55,7 @@ class Home extends Component {
       }
     }
     const generateJumpingPiece = () => {
-      console.log(jumpingPieceCoords)
       if (jumpingPieceCoords.length > 0) {
-        console.log(jumpingPieceCoords)
         return jumpingPieceCoords
       }
       else return []

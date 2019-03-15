@@ -6,6 +6,7 @@ import { Login, Create, Home, Friends, Profile, CreateGame } from './components/
 import { getUserConditionally } from './actions/user';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import './App.css';
+import { socket } from './index'
 
 class App extends Component {
   constructor(props) {
@@ -15,6 +16,12 @@ class App extends Component {
   componentDidMount() {
     if (!this.props.user) {
       this.props.getUserConditionally(this.props.user)
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.userReducer.user) {
+      socket.emit('login', this.props.userReducer.user.userId)
     }
   }
 
