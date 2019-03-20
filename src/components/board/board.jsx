@@ -1,6 +1,7 @@
 import React, {
   Component
 } from 'react'
+import { aiMove } from './aiMove'
 import ReactDOM from 'react-dom'
 import './board.css'
 
@@ -256,6 +257,8 @@ class Board extends Component {
     const column = (Math.floor(x / ratio))
     const row = (Math.floor(y / ratio))
     const square = board[column][row]
+
+    aiMove(board, this.props.activeGame)
 
     const checkCoordsForJump = (xCoord, yCoord, jumpArr) => {
       let result = false
