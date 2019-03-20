@@ -29,9 +29,7 @@ class CreateGame extends Component {
 
   validateForm(form) {
     let valid = false
-    console.log(form.game)
     if ((form.game.playerColors.black.length > 0) && (form.game.playerColors.red.length > 0)) {
-      console.log('hitting')
       valid = true
     }
     return valid

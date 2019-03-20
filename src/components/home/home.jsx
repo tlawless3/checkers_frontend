@@ -119,7 +119,6 @@ class Home extends Component {
   }
 
   async handleAcceptGame(gameId) {
-    console.log('accept func')
     const postObj = {
       game: {
         gameId,
@@ -129,19 +128,16 @@ class Home extends Component {
     const response = await axios.put(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/game/update', postObj, {
       withCredentials: true
     })
-    console.log(response)
     await this.props.fetchUserGames()
   }
 
   async handleForefitGame(gameId, playerColor) {
-    console.log('forefit func')
     const postObj = {
       game: {
         gameId,
         status: playerColor === 'black' ? 'redWin' : 'blackWin',
       },
     }
-    console.log(postObj)
     // try {
     await axios.put(process.env.REACT_APP_SERVER_URL + '/api/v1.0.0/game/update', postObj, {
       withCredentials: true

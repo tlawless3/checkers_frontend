@@ -9,7 +9,7 @@ export const aiMove = (board, activeColor, depth, activeGame, moveArr) => {
     //check if there are jumps
     for (let i = 0; i < passedBoard.length; i++) {
       for (let j = 0; j < passedBoard.length; j++) {
-        if ((passedBoard[i][j].color === colorTurn) || (passedBoard[i][j].color === colorTurn)) {
+        if ((passedBoard[i][j].color === colorTurn)) {
           const jumps = generatePossibleMoves(i, j, true, passedBoard, colorTurn)
           if (jumps.length > 0) {
             possibleJumps.push({
@@ -27,7 +27,7 @@ export const aiMove = (board, activeColor, depth, activeGame, moveArr) => {
     let possibleMoves = []
     for (let i = 0; i < passedBoard.length; i++) {
       for (let j = 0; j < passedBoard.length; j++) {
-        if ((passedBoard[i][j].color === colorTurn) || (passedBoard[i][j].color === colorTurn)) {
+        if ((passedBoard[i][j].color === colorTurn)) {
           const moves = generatePossibleMoves(i, j, false, passedBoard, colorTurn)
           if (moves.length > 0) {
             possibleMoves.push({
@@ -41,29 +41,32 @@ export const aiMove = (board, activeColor, depth, activeGame, moveArr) => {
     return possibleMoves
   }
 
-  let boardCopy = board.slice()
+  // let boardCopy = board.slice()
   let curDepth = depth
-  let curColor = activeColor
+  let opposingColor = activeColor
   if (!depth) {
     curDepth = 0
   }
   if (!activeColor) {
-    curColor = (activeGame.status === 'redTurn' ? 'red' : 'black')
+    opposingColor = (activeGame.status === 'redTurn' ? 'red' : 'black')
   }
-  let jumpTiles = generateJumps(boardCopy, activeColor)
-  let moveTiles = generateMoves(boardCopy, activeColor)
-  //minimax for all tiles that have a jump
+  let jumpTiles = generateJumps(opposingColor, board)
+  let moveTiles = generateMoves(opposingColor, board)
   if (jumpTiles.length === 1) {
-    let moves = generatePossibleMoves(jumpTiles[0].tile[0], jumpTiles[0].tile[1], true, board, curColor)
+    let moves = generatePossibleMoves(jumpTiles[0].tile[0], jumpTiles[0].tile[1], true, board, opposingColor)
     if (moves.length === 1) {
       return moves[0]
     } else {
-      moves.forEach(move => {
-
-      })
+      return moves[Math.floor(Math.random() * moves.length)]
     }
   } else if (jumpTiles.length === 0 && moveTiles.length > 0) {
-
+    let targetTile = moveTiles[Math.floor(Math.random() * moveTiles.length)]
+    let moves = generatePossibleMoves(targetTile.tile[0], targetTile.tile[1], false, board, opposingColor)
+    return moves[Math.floor(Math.random() * moves.length)]
+  } else if (jumpTiles.length > 1) {
+    let targetTile = jumpTiles[Math.floor(Math.random() * moveTiles.length)]
+    let moves = generatePossibleMoves(targetTile.tile[0], targetTile.tile[1], true, board, opposingColor)
+    return moves[Math.floor(Math.random() * moves.length)]
   }
 }
 
@@ -74,13 +77,8 @@ export const aiMove = (board, activeColor, depth, activeGame, moveArr) => {
 //
 //copy pasted basically from board.jsx
 
-const updateBoard = (xCoord, yCoord, board) => {
-  let newBoard =
-    return newBoard
-}
 
 const generatePossibleMoves = (xCoord, yCoord, jumpsOnly, board, turnColor) => {
-  console.log(turnColor)
   // const board = board
   const rows = board.length
   //looking for redTurn blackTurn
@@ -92,7 +90,7 @@ const generatePossibleMoves = (xCoord, yCoord, jumpsOnly, board, turnColor) => {
   let availabileTiles = []
   //wow you could do this with a for loop that increments by 2
   //TODO change this to a for loop
-  if (opposingTeam === 'black') {
+  if (opposingTeam === 'red') {
     if (y + 1 < rows && x + 1 < rows && board[x + 1][y + 1].color === 'empty' && !jumpsOnly) {
       availabileTiles.push([x + 1, y + 1])
     } else if (y + 2 < rows && x + 2 < rows && board[x + 1][y + 1].color === opposingTeam && board[x + 2][y + 2].color === 'empty') {
