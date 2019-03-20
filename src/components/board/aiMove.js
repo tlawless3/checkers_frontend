@@ -1,12 +1,16 @@
-export const aiMove = (board, activeGame) => {
+//pass in null for active color and depth to initialize recursive call
+export const aiMove = (board, activeColor, depth, activeGame, moveArr) => {
+  if (depth >= 7) {
+    return 'end'
+  }
   //returns an array of tiles that can jump
-  const generateJumps = (colorTurn) => {
+  const generateJumps = (colorTurn, passedBoard) => {
     let possibleJumps = []
     //check if there are jumps
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board.length; j++) {
-        if ((board[i][j].color === colorTurn) || (board[i][j].color === colorTurn)) {
-          const jumps = generatePossibleMoves(i, j, true, board, activeGame)
+    for (let i = 0; i < passedBoard.length; i++) {
+      for (let j = 0; j < passedBoard.length; j++) {
+        if ((passedBoard[i][j].color === colorTurn) || (passedBoard[i][j].color === colorTurn)) {
+          const jumps = generatePossibleMoves(i, j, true, passedBoard, colorTurn)
           if (jumps.length > 0) {
             possibleJumps.push({
               tile: [i, j],
@@ -19,12 +23,12 @@ export const aiMove = (board, activeGame) => {
     return possibleJumps
   }
   //returns an array of tiles that can move
-  const generateMoves = (colorTurn) => {
+  const generateMoves = (colorTurn, passedBoard) => {
     let possibleMoves = []
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board.length; j++) {
-        if ((board[i][j].color === colorTurn) || (board[i][j].color === colorTurn)) {
-          const moves = generatePossibleMoves(i, j, false, board, activeGame)
+    for (let i = 0; i < passedBoard.length; i++) {
+      for (let j = 0; j < passedBoard.length; j++) {
+        if ((passedBoard[i][j].color === colorTurn) || (passedBoard[i][j].color === colorTurn)) {
+          const moves = generatePossibleMoves(i, j, false, passedBoard, colorTurn)
           if (moves.length > 0) {
             possibleMoves.push({
               tile: [i, j],
@@ -34,57 +38,32 @@ export const aiMove = (board, activeGame) => {
         }
       }
     }
-    console.log(possibleMoves)
     return possibleMoves
   }
 
-  const determineBestMove = (tileScoreArr, startingColor, depth) => {
-    console.log('----', tileScoreArr)
-    if (depth <= 7) {
-      let moveArr = tileScoreArr.map(tileObj => {
-        let moves = generatePossibleMoves(tileObj.tile[0], tileObj.tile[1], true, board, startingColor)
-        if (moves) {
-          const returnValue = moves.map(move => {
-            return {
-              tile: move,
-              score: tileObj.score++
-            }
-          })
-          return returnValue
-        } else {
-          moves = generatePossibleMoves(tileObj.tile[0], tileObj.tile[1], false, board, startingColor)
-          const returnValue = moves.map(move => {
-            return {
-              tile: move,
-              score: tileObj.score
-            }
-          })
-          return returnValue
-        }
+  let boardCopy = board.slice()
+  let curDepth = depth
+  let curColor = activeColor
+  if (!depth) {
+    curDepth = 0
+  }
+  if (!activeColor) {
+    curColor = (activeGame.status === 'redTurn' ? 'red' : 'black')
+  }
+  let jumpTiles = generateJumps(boardCopy, activeColor)
+  let moveTiles = generateMoves(boardCopy, activeColor)
+  //minimax for all tiles that have a jump
+  if (jumpTiles.length === 1) {
+    let moves = generatePossibleMoves(jumpTiles[0].tile[0], jumpTiles[0].tile[1], true, board, curColor)
+    if (moves.length === 1) {
+      return moves[0]
+    } else {
+      moves.forEach(move => {
+
       })
-      let newColor = (startingColor === 'red' ? 'black' : 'red')
-      depth++
-      if (moveArr.length === 0) {
-        console.log('end')
-      } else {
-        determineBestMove(moveArr, newColor, depth)
-      }
     }
-  }
-  let possibleJumps = generateJumps(activeGame.status === 'redTurn' ? 'red' : 'black')
-  //when there are multipleJumps
-  if (possibleJumps.length > 0) {
-    return determineBestMove(possibleJumps, activeGame.status === 'redTurn' ? 'red' : 'black', 0)
-  }
-  //when there is only one jump
-  else if (possibleJumps.length === 1) {
-    return possibleJumps[0]
-  }
-  //when there are no jumps
-  else {
-    let possibleMoves = generateMoves(activeGame.status === 'redTurn' ? 'red' : 'black')
-    console.log(possibleMoves)
-    return determineBestMove(possibleMoves, activeGame.status === 'redTurn' ? 'red' : 'black', 0)
+  } else if (jumpTiles.length === 0 && moveTiles.length > 0) {
+
   }
 }
 
@@ -95,7 +74,13 @@ export const aiMove = (board, activeGame) => {
 //
 //copy pasted basically from board.jsx
 
+const updateBoard = (xCoord, yCoord, board) => {
+  let newBoard =
+    return newBoard
+}
+
 const generatePossibleMoves = (xCoord, yCoord, jumpsOnly, board, turnColor) => {
+  console.log(turnColor)
   // const board = board
   const rows = board.length
   //looking for redTurn blackTurn
