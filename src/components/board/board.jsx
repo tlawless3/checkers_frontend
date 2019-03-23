@@ -108,7 +108,7 @@ class Board extends Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.clearAndRedrawBoard()
     if (this.props.activeGame && this.props.activeGame.jumpingPiece.length > 0) {
       this.setState({
@@ -121,9 +121,26 @@ class Board extends Component {
         jumpingPiece: []
       })
     }
+    if (this.props.board && this.props.activeGame) {
+      if ((this.props.activeGame.playerColors.red === 'AI' && this.props.activeGame.status === 'redTurn') || (this.props.activeGame.playerColors.black === 'AI' && this.props.activeGame.status === 'blackTurn')) {
+        let repeat = true
+        let jumpingObj = { jumping: false, jumpingTile: null }
+        while (repeat) {
+          let returnObj = aiMove(this.props.board, (this.props.activeGame.status === 'redTurn' ? 'red' : 'black'), jumpingObj)
+          repeat = returnObj.jumping
+          jumpingObj = { jumping: returnObj.jumping, jumpingTile: returnObj.jumpingPiece }
+          let newBoard = returnObj.board
+          if (returnObj.jumping) {
+            await this.props.updateBoard(newBoard, true, this.checkWinState(newBoard), [])
+          } else {
+            await this.props.updateBoard(newBoard, false, this.checkWinState(newBoard), [])
+          }
+        }
+      }
+    }
   }
 
-  componentDidUpdate() {
+  async componentDidUpdate() {
     this.clearAndRedrawBoard()
   }
 
@@ -512,6 +529,23 @@ class Board extends Component {
             selectedSquare: {},
             availabileTiles: []
           })
+        }
+      }
+      if (this.props.board && this.props.activeGame) {
+        if ((this.props.activeGame.playerColors.red === 'AI' && this.props.activeGame.status === 'redTurn') || (this.props.activeGame.playerColors.black === 'AI' && this.props.activeGame.status === 'blackTurn')) {
+          let repeat = true
+          let jumpingObj = { jumping: false, jumpingTile: null }
+          while (repeat) {
+            let returnObj = aiMove(this.props.board, (this.props.activeGame.status === 'redTurn' ? 'red' : 'black'), jumpingObj)
+            repeat = returnObj.jumping
+            jumpingObj = { jumping: returnObj.jumping, jumpingTile: returnObj.jumpingPiece }
+            let newBoard = returnObj.board
+            if (returnObj.jumping) {
+              await this.props.updateBoard(newBoard, true, this.checkWinState(newBoard), [])
+            } else {
+              await this.props.updateBoard(newBoard, false, this.checkWinState(newBoard), [])
+            }
+          }
         }
       }
     }
