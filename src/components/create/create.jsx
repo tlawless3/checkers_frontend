@@ -36,6 +36,8 @@ class Create extends Component {
       return available.data.available
     }
 
+    console.log(await !checkUsernameAvailable)
+
     let message = ''
     if (!this.state.username) {
       message += 'Enter a username \n'

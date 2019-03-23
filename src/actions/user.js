@@ -47,6 +47,14 @@ const getUserByToken = () => async (dispatch) => {
   }
 }
 
+export const clearUser = () => (dispatch) => {
+  dispatch(requestUser)
+  dispatch({
+    type: 'RECIEVE_USER',
+    payload: null
+  })
+}
+
 const shouldGetUser = (state) => {
   const user = state.userReducer.user
   if (!user) {

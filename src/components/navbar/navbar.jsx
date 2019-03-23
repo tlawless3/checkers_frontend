@@ -1,6 +1,7 @@
 import React, {
   Component
 } from 'react';
+import { clearUser } from '../../actions/user'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import './navbar.css';
@@ -22,7 +23,8 @@ class Navbar extends Component {
       eraseCookie(cookies[i].split("=")[0]);
     }
     localStorage.clear()
-    window.location.reload()
+    this.props.clearUser()
+    // window.location.reload()
   }
 
   render() {
@@ -65,6 +67,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  clearUser: () => dispatch(clearUser())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
