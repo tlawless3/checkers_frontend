@@ -247,6 +247,9 @@ class Board extends Component {
   async handleClick(event) {
 
     if ((this.props.userReducer.user.userId === this.props.activeGame.playerColors.red) && (this.props.activeGame.status === 'redTurn') || (this.props.userReducer.user.userId === this.props.activeGame.playerColors.black) && (this.props.activeGame.status === 'blackTurn')) {
+      const passedBoard = this.props.board
+      const passsedActiveGame = this.props.activeGame
+      console.log(aiMove(passedBoard, (this.props.activeGame.status === 'redTurn' ? 'red' : 'black'), 7, passsedActiveGame, { jumping: false, jumpingTile: null }))
       const board = this.props.board
       const resolution = this.props.resolution
       const rows = board.length
@@ -338,7 +341,7 @@ class Board extends Component {
               } else if (column - this.state.selectedSquare.x === -2 && row - this.state.selectedSquare.y === -2) {
                 newBoard[this.state.selectedSquare.x - 1][this.state.selectedSquare.y - 1].color = 'empty'
               }
-              //updateBoard(newBoard, jumping, winState,)
+              //updateBoard(newBoard, jumping, winState, jumping piece)
               await this.props.updateBoard(newBoard, true, this.checkWinState(newBoard), [column, row])
             } else {
               await this.props.updateBoard(newBoard, false, false, [])
