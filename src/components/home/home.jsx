@@ -129,6 +129,7 @@ class Home extends Component {
       withCredentials: true
     })
     await this.props.fetchUserGames()
+    await this.props.setActiveGame(this.props.activeGameReducer.activeGame.id)
   }
 
   async handleForefitGame(gameId, playerColor) {
